@@ -1,0 +1,58 @@
+{
+  "source_system_count": "3175",
+  "imported": 3175,
+  "skipped": [],
+  "duplicate_names": {
+    "Albion": 2,
+    "Alexandria": 2,
+    "Alphard": 2,
+    "Altoona": 2,
+    "Arcadia": 3,
+    "Atreus": 2,
+    "Bell": 2,
+    "Bremen": 2,
+    "Cadiz": 2,
+    "Cameron": 2,
+    "Camlann": 2,
+    "Chaffee": 2,
+    "Dagda": 2,
+    "Elbing": 2,
+    "Falsterbo": 2,
+    "Ferris": 2,
+    "Fletcher": 2,
+    "Hamilton": 2,
+    "Kalmar": 2,
+    "Köln": 2,
+    "Kupang": 2,
+    "Lancaster": 2,
+    "Niles": 2,
+    "Orkney": 2,
+    "Preston": 2,
+    "Quimper": 2,
+    "Sakhalin": 2,
+    "Sanurcha": 2,
+    "Sheridan": 2,
+    "Stettin": 2,
+    "Tiber": 2,
+    "Trondheim": 2,
+    "York": 2,
+    "Zara": 2,
+    "Glory": 2,
+    "Star Cluster 1108": 2
+  },
+  "coordinate_range": {
+    "x": [
+      -1877.428,
+      1937.373
+    ],
+    "y": [
+      -2003.902,
+      1912.177
+    ]
+  },
+  "sha256": "185e2e532dadddb292c75762d08d9d3c54eaa0f7d245918e0b841c977b9e807f",
+  "political_reference": {
+    "3027": "3025",
+    "3060": "3059d"
+  }
+}

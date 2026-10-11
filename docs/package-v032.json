@@ -1,0 +1,11 @@
+{
+  "version": "0.32.0",
+  "date": "2026-10-10",
+  "unit_art": "passed",
+  "v13": "passed",
+  "ui_suites_passed": 24,
+  "packaged_unit_art_ui": "passed",
+  "package_source_files_matched": 125,
+  "desktop_shortcut": "0.32.0",
+  "previous_executable_preserved": true
+}

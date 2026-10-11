@@ -1,0 +1,22 @@
+{
+  "version": "0.37.0",
+  "date": "2026-10-11",
+  "simulation_suites_passed": 43,
+  "ui_suites_passed": 25,
+  "packaged_story_ui": "passed",
+  "source_files_matched": 131,
+  "campaigns_90_days": 8,
+  "intermediate_reloads": 48,
+  "native_ui_dimensions": [
+    [
+      1100,
+      740
+    ],
+    [
+      1360,
+      960
+    ]
+  ],
+  "desktop_shortcut": "0.37.0",
+  "previous_executable_preserved": true
+}

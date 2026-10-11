@@ -1,0 +1,22 @@
+extends SceneTree
+const Library=preload("res://sim/campaign_library.gd")
+const Campaign=preload("res://sim/campaign.gd")
+func _initialize():
+ var library=Library.new();library.directory="user://test-library-"+str(Time.get_ticks_usec())
+ var sim=Campaign.new(42)
+ var old=sim.state.duplicate(true);old.erase("career_start");old.version=23;old.rng_state=str(sim.rng.state)
+ var path=library.directory+"-old.json"
+ var file=FileAccess.open(path,FileAccess.WRITE);file.store_string(JSON.stringify(old));file.close()
+ var source=FileAccess.get_file_as_string(path)
+ assert(library.import_legacy(path)==OK)
+ assert(FileAccess.get_file_as_string(path)==source)
+ assert(library.import_legacy(path)==OK and library.entries().size()==1)
+ var loaded=Campaign.new();assert(loaded.load_game(library.entries()[0].path)==OK)
+ assert(loaded.state.staff==sim.state.staff and loaded.state.mechs==sim.state.mechs and loaded.state.chronicle==sim.state.chronicle)
+ assert(loaded.state.career_start.is_empty())
+ var a=library.create(sim);var b=library.create(sim);assert(a!=b and not a.is_empty() and not b.is_empty())
+ var before=loaded.state.duplicate(true)
+ file=FileAccess.open(library.directory+"/bad.json",FileAccess.WRITE);file.store_string("{}");file.close()
+ assert(loaded.load_game(library.directory+"/bad.json")!=OK and loaded.state==before)
+ print("v0.31: importación antigua intacta, IDs separados y carga inválida sin pérdida OK")
+ quit()

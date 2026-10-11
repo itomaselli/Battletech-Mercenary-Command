@@ -1,0 +1,21 @@
+extends SceneTree
+const C=preload("res://sim/campaign.gd")
+func _initialize():
+ var s=C.new(24)
+ s.rpg_command("configure",{"origin":"mercenario","specialty":"trato","motivation":"deuda"})
+ s.advance(14)
+ var d=s.state.rpg.director
+ assert(not d.pending.is_empty())
+ var seen=d.seen.size()
+ assert(not s.RPG.waiting(s))
+ s.rpg_command("director",{"action":"rest"})
+ assert(d.pending.is_empty() and s.RPG.busy(s))
+ s.advance(1)
+ assert(not s.RPG.busy(s))
+ s.RPG.Director.tick(s)
+ assert(d.seen.size()==seen and d.summaries.size()==1)
+ assert(s.save_game("user://rpg24.json")==OK)
+ var loaded=C.new()
+ assert(loaded.load_game("user://rpg24.json")==OK and loaded.state==s.state)
+ print("v0.24: ritmo, invitación opcional, descanso, memoria, no repetición y guardado OK")
+ quit()

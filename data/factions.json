@@ -1,0 +1,200 @@
+[
+  {
+    "id": "lore-davion",
+    "name": "Casa Davion",
+    "code": "FS",
+    "known_from": 3027,
+    "headquarters": "New Avalon",
+    "source": "https://www.sarna.net/wiki/House_Davion",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "FS",
+      "FCF"
+    ]
+  },
+  {
+    "id": "lore-steiner",
+    "name": "Casa Steiner",
+    "code": "LC",
+    "known_from": 3027,
+    "headquarters": "Tharkad",
+    "source": "https://www.sarna.net/wiki/House_Steiner",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "LC",
+      "LA",
+      "FCL"
+    ]
+  },
+  {
+    "id": "lore-kurita",
+    "name": "Casa Kurita",
+    "code": "DC",
+    "known_from": 3027,
+    "headquarters": "Luthien",
+    "source": "https://www.sarna.net/wiki/House_Kurita",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "DC"
+    ]
+  },
+  {
+    "id": "lore-marik",
+    "name": "Casa Marik",
+    "code": "FWL",
+    "known_from": 3027,
+    "headquarters": "Atreus",
+    "source": "https://www.sarna.net/wiki/House_Marik",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "FWL"
+    ]
+  },
+  {
+    "id": "lore-liao",
+    "name": "Casa Liao",
+    "code": "CC",
+    "known_from": 3027,
+    "headquarters": "Sian",
+    "source": "https://www.sarna.net/wiki/House_Liao",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "CC"
+    ]
+  },
+  {
+    "id": "lore-comstar",
+    "name": "ComStar",
+    "code": "CS",
+    "known_from": 3027,
+    "headquarters": "Red institucional; sede cambia según época",
+    "source": "https://www.sarna.net/wiki/ComStar",
+    "kind": "Organización",
+    "employer": true,
+    "codes": [
+      "CS"
+    ]
+  },
+  {
+    "id": "lore-blake",
+    "name": "Word of Blake",
+    "code": "WB",
+    "known_from": 3052,
+    "headquarters": "Terra",
+    "source": "https://www.sarna.net/wiki/Word_of_Blake",
+    "kind": "Organización",
+    "employer": true,
+    "codes": [
+      "WB"
+    ]
+  },
+  {
+    "id": "lore-rasalhague",
+    "name": "Free Rasalhague Republic",
+    "code": "FR",
+    "known_from": 3034,
+    "headquarters": "Red institucional; sede cambia según época",
+    "source": "https://www.sarna.net/wiki/Free_Rasalhague_Republic",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "FR"
+    ]
+  },
+  {
+    "id": "lore-taurus",
+    "name": "Taurian Concordat",
+    "code": "TC",
+    "known_from": 3027,
+    "headquarters": "Taurus",
+    "source": "https://www.sarna.net/wiki/Taurian_Concordat",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "TC"
+    ]
+  },
+  {
+    "id": "lore-canopus",
+    "name": "Magistracy of Canopus",
+    "code": "MOC",
+    "known_from": 3027,
+    "headquarters": "Canopus IV",
+    "source": "https://www.sarna.net/wiki/Magistracy_of_Canopus",
+    "kind": "Estado",
+    "employer": true,
+    "codes": [
+      "MOC"
+    ]
+  },
+  {
+    "id": "lore-wolf",
+    "name": "Clan Wolf",
+    "code": "CWF",
+    "known_from": 3050,
+    "headquarters": "Zona de ocupación",
+    "source": "https://www.sarna.net/wiki/Clan_Wolf",
+    "kind": "Clan",
+    "employer": false,
+    "codes": [
+      "CWF"
+    ]
+  },
+  {
+    "id": "lore-falcon",
+    "name": "Clan Jade Falcon",
+    "code": "CJF",
+    "known_from": 3050,
+    "headquarters": "Zona de ocupación",
+    "source": "https://www.sarna.net/wiki/Clan_Jade_Falcon",
+    "kind": "Clan",
+    "employer": false,
+    "codes": [
+      "CJF"
+    ]
+  },
+  {
+    "id": "lore-bear",
+    "name": "Clan Ghost Bear",
+    "code": "CGB",
+    "known_from": 3050,
+    "headquarters": "Zona de ocupación",
+    "source": "https://www.sarna.net/wiki/Clan_Ghost_Bear",
+    "kind": "Clan",
+    "employer": false,
+    "codes": [
+      "CGB"
+    ]
+  },
+  {
+    "id": "lore-dragoons",
+    "name": "Wolf’s Dragoons",
+    "code": "MERC",
+    "known_from": 3027,
+    "headquarters": "Según contrato",
+    "source": "https://www.sarna.net/wiki/Wolf%27s_Dragoons",
+    "kind": "Mercenarios",
+    "employer": false,
+    "codes": [
+      "MERC"
+    ]
+  },
+  {
+    "id": "lore-kell",
+    "name": "Kell Hounds",
+    "code": "MERC",
+    "known_from": 3027,
+    "headquarters": "Según contrato",
+    "source": "https://www.sarna.net/wiki/Kell_Hounds",
+    "kind": "Mercenarios",
+    "employer": false,
+    "codes": [
+      "MERC"
+    ]
+  }
+]

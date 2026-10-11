@@ -1,0 +1,71 @@
+name: Windows build and smoke test
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'sim/**'
+      - 'ui/**'
+      - 'visual/**'
+      - 'assets/**'
+      - 'data/**'
+      - 'tools/build_windows.py'
+      - 'tests/export_smoke.gd'
+      - 'project.godot'
+      - 'export_presets.cfg'
+      - '.github/workflows/windows.yml'
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download official Godot and templates; verify SHA512
+        shell: pwsh
+        run: |
+          $base = 'https://github.com/godotengine/godot/releases/download/4.4.1-stable'
+          $files = @('Godot_v4.4.1-stable_win64.exe.zip', 'Godot_v4.4.1-stable_export_templates.tpz')
+          Invoke-WebRequest "$base/SHA512-SUMS.txt" -OutFile checksums.txt
+          foreach ($file in $files) {
+            Invoke-WebRequest "$base/$file" -OutFile $file
+            $line = Get-Content checksums.txt | Where-Object { $_.EndsWith($file) } | Select-Object -First 1
+            if (-not $line) { throw "Missing checksum for $file" }
+            $expected = ($line -split '\s+')[0].ToLower()
+            $actual = (Get-FileHash $file -Algorithm SHA512).Hash.ToLower()
+            if ($actual -ne $expected) { throw "Checksum mismatch for $file" }
+          }
+          Expand-Archive $files[0] -DestinationPath engine
+          Copy-Item $files[1] templates.zip
+          Expand-Archive templates.zip -DestinationPath templates
+      - name: Export portable Windows build
+        shell: pwsh
+        run: |
+          python tools/build_windows.py --godot "$pwd/engine/Godot_v4.4.1-stable_win64_console.exe" --template "$pwd/templates/templates/windows_release_x86_64.exe"
+          if ($LASTEXITCODE -ne 0) { throw 'Export failed' }
+      - name: Test exported executable on Windows
+        shell: pwsh
+        run: |
+          $game = Get-ChildItem exports -Directory -Filter '*Windows-x64' | Select-Object -First 1
+          $test = [char]34 + "$pwd/tests/export_smoke.gd" + [char]34
+          $process = Start-Process -FilePath "$($game.FullName)/MercenaryCommand.exe" -ArgumentList @('--headless','--script',$test, '--quit-after','240') -RedirectStandardOutput smoke.log -RedirectStandardError smoke-error.log -PassThru
+          if (-not $process.WaitForExit(120000)) { $process.Kill(); throw 'Smoke test timeout' }
+          $log = (Get-Content smoke.log -Raw) + (Get-Content smoke-error.log -Raw)
+          Write-Output $log
+          if ($process.ExitCode -ne 0 -or $log -notmatch 'EXPORT_SMOKE_PASS' -or $log -match 'ERROR:|FAIL:') { throw 'Exported Windows smoke test failed' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mercenary-command-windows-x64
+          path: exports/*.zip
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-build-verification
+          path: |
+            smoke*.log
+            docs/windows-build.json

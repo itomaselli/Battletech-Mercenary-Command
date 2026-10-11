@@ -1,0 +1,127 @@
+[
+  {
+    "test": "career_wizard_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.30: asistente reversible, confirmación única y carreras separadas OK\n"
+  },
+  {
+    "test": "expansion_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nUI expansión: filtros, selección, cotización sin cargo, confirmación y tránsito OK\n"
+  },
+  {
+    "test": "identity_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nIdentity UI: dialog applied names and refreshed header\n"
+  },
+  {
+    "test": "inbox_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.27: bandeja causal, expedientes, selección estable y render sin efectos OK\n"
+  },
+  {
+    "test": "journey_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.31: carrera → aceptar → preparar → desplegar → informe, confirmación cancelable OK\n"
+  },
+  {
+    "test": "layout_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.31: navegación y asistente a 1100/1360, texto grande, sin columnas colapsadas OK\n"
+  },
+  {
+    "test": "phase2_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nPhase II UI: 7 checks, 0 failures\n"
+  },
+  {
+    "test": "phase3_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nPhase III UI: 7 checks, 0 failures\n"
+  },
+  {
+    "test": "phase4_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nPhase IV UI: 10 checks, 0 failures\n"
+  },
+  {
+    "test": "routes_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.28: todas las rutas integradas, render sin efectos y preparación OK\n"
+  },
+  {
+    "test": "rpg_pages_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nRPG UI: diez secciones con controles legibles y ventana acotada OK\n"
+  },
+  {
+    "test": "rpg_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nRPG UI: creación, escena, alerta y dimensiones OK\n"
+  },
+  {
+    "test": "shell_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.26: estructura persistente, hangar, finanzas y navegación sin ventanas OK\n"
+  },
+  {
+    "test": "story_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nStory UI: petición → apoyo → objetivo → trabajo, expedientes y 2 resoluciones sin mutar simulación OK\n"
+  },
+  {
+    "test": "ui_smoke.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nUI smoke: scene built, operation resolved, report rendered\n"
+  },
+  {
+    "test": "unit_art_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.32: 56 fichas de catálogo y hangar/taller usan ID de modelo, proporción intacta y sin mutar campaña OK\n"
+  },
+  {
+    "test": "unit_cards_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nFichas: Hangar y Mercado, dos tamaños; sprites 48×72 y texto con ancho disponible OK\n"
+  },
+  {
+    "test": "v02_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.2 UI: 16 checks, 0 failures\n"
+  },
+  {
+    "test": "v03_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.3 UI: 9 checks, 0 failures\n"
+  },
+  {
+    "test": "v04_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.4 UI: 7 checks, 0 failures\n"
+  },
+  {
+    "test": "v05_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.5 UI: 6 checks, 0 failures\n"
+  },
+  {
+    "test": "v06_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.6 UI: 7 checks, 0 failures\n"
+  },
+  {
+    "test": "v12_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nAtlas dimensions (1024, 716) map (738.0, 450.0)\nv0.12 UI: atlas opened and selected location\n"
+  },
+  {
+    "test": "v13_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nINITIAL 34 category 0 YEAR 3027\nVEHICLES 8\nv0.13 UI: filtros, ficha y dimensiones OK\n"
+  },
+  {
+    "test": "v14_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.14 UI: cinco ofertas y aceptación OK\n"
+  }
+]

@@ -1,0 +1,1056 @@
+{
+	"accepted": {
+		"advance": 11250,
+		"days": 3,
+		"deadline": 5,
+		"difficulty": 5,
+		"employer": "Liga comercial",
+		"employer_id": "trade_league",
+		"expires": 14,
+		"failure_pay": 6750,
+		"id": 0,
+		"intel": "Contactos ligeros posibles",
+		"min_force": 2,
+		"name": "Escolta de convoy",
+		"pay": 45000,
+		"reliability": "Media"
+	},
+	"active": {
+		"contract": {
+			"advance": 11250,
+			"days": 3,
+			"deadline": 5,
+			"difficulty": 5,
+			"employer": "Liga comercial",
+			"employer_id": "trade_league",
+			"expires": 14,
+			"failure_pay": 6750,
+			"id": 0,
+			"intel": "Contactos ligeros posibles",
+			"min_force": 2,
+			"name": "Escolta de convoy",
+			"pay": 45000,
+			"reliability": "Media"
+		},
+		"doctrine": 1,
+		"equipment_power": -1,
+		"leader": 0,
+		"remaining": 2,
+		"rpg_danger": 100,
+		"rpg_support": false,
+		"team": [
+			0,
+			1,
+			2,
+			3
+		]
+	},
+	"alumni": [],
+	"arrears": 0,
+	"bonds": {
+
+	},
+	"candidates": [
+		{
+			"fee": 12000,
+			"name": "Lucía Serrano",
+			"role": "Piloto",
+			"salary": 7000,
+			"skill": 4
+		},
+		{
+			"fee": 9000,
+			"name": "Pavel Ortiz",
+			"role": "Técnico",
+			"salary": 6000,
+			"skill": 3
+		},
+		{
+			"fee": 10000,
+			"name": "Nadia Okafor",
+			"role": "Logística",
+			"salary": 6000,
+			"skill": 4
+		},
+		{
+			"fee": 16000,
+			"name": "Dotación Vega",
+			"role": "Dotación",
+			"salary": 9000,
+			"skill": 3
+		}
+	],
+	"captain_name": "Capitana de prueba",
+	"chronicle": [
+		{
+			"date": "3060-05-17",
+			"day": 0,
+			"kind": "Fundación",
+			"text": "La compañía recibe cuatro BattleMechs en Galatea. Voss asume el mando de campo."
+		},
+		{
+			"date": "3060-05-17",
+			"day": 0,
+			"kind": "Mercado",
+			"text": "Llegaron tres ofertas. Su remuneración refleja nuestra reputación; la inteligencia es estimativa."
+		},
+		{
+			"date": "3060-05-17",
+			"day": 0,
+			"kind": "Identidad",
+			"text": "Continuidad antigua queda al mando del capitán Capitana de prueba."
+		},
+		{
+			"date": "3060-05-17",
+			"day": 0,
+			"kind": "Capitán · Identidad",
+			"text": "Capitana de prueba establece su trasfondo: Antiguo oficial; especialidad Trato; motivación: Proteger a mi gente. El vínculo se establece desde hoy, sin recuerdos retroactivos."
+		},
+		{
+			"date": "3060-05-17",
+			"day": 0,
+			"kind": "Contrato",
+			"text": "Escolta de convoy aceptado. Anticipo 11250; desplegar 2 máquinas en cinco días. Al incumplir se devuelve el anticipo."
+		},
+		{
+			"date": "3060-05-17",
+			"day": 0,
+			"kind": "Parte operacional",
+			"text": "Elena Voss: Órdenes recibidas. Iniciamos aproximación. El plazo es estimativo; fuerzas enemigas no confirmadas."
+		},
+		{
+			"date": "3060-05-17",
+			"day": 0,
+			"kind": "Orden",
+			"text": "Escolta de convoy: 4 unidades; doctrina equilibrada. Consumo: 40 suministros."
+		},
+		{
+			"date": "3060-05-18",
+			"day": 1,
+			"kind": "Capitán · Región · Galatea",
+			"text": "Boletín de tránsito: Disputa por prioridad de transporte y suministros. Los enlaces solicitan seguridad y mediación; se desconoce la capacidad de quienes amenazan la ruta."
+		},
+		{
+			"date": "3060-05-18",
+			"day": 1,
+			"kind": "Parte operacional",
+			"text": "Elena Voss: La fuerza avanza hacia el área asignada. Sin contacto confirmado todavía."
+		}
+	],
+	"company_name": "Continuidad antigua",
+	"contract_debt": 0,
+	"day": 1,
+	"ended": false,
+	"frontier": {
+		"cooldowns": {
+
+		},
+		"next_id": 100000000,
+		"opportunities": [],
+		"queries": {
+
+		},
+		"reports": {
+
+		},
+		"since": 0
+	},
+	"funds": 251250,
+	"issues": [],
+	"ledger": [
+		{
+			"amount": 11250,
+			"category": "Contratos",
+			"day": 0,
+			"detail": "Anticipo: Escolta de convoy"
+		}
+	],
+	"location_id": "sarna-918",
+	"lore_activity": {
+		"lore-bear": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-blake": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-canopus": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-comstar": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-davion": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-dragoons": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-falcon": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-kell": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-kurita": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-liao": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-marik": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-rasalhague": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-steiner": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-taurus": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		},
+		"lore-wolf": {
+			"cycles": 0,
+			"day": 0,
+			"text": "Sin boletín reciente."
+		}
+	},
+	"lore_contacts": {
+
+	},
+	"market_seed": 420,
+	"mech_market": [
+		{
+			"days": 4,
+			"expires": 14,
+			"hp": 35,
+			"id": 0,
+			"model": 0,
+			"model_id": "locust-lct-1v",
+			"price": 60491
+		},
+		{
+			"days": 4,
+			"expires": 14,
+			"hp": 65,
+			"id": 1,
+			"model": 1,
+			"model_id": "shadow-hawk-shd-2h",
+			"price": 157716
+		},
+		{
+			"days": 2,
+			"expires": 14,
+			"hp": 85,
+			"id": 2,
+			"model": 32,
+			"model_id": "thunderbolt-tdr-5s",
+			"price": 201718
+		},
+		{
+			"days": 2,
+			"expires": 14,
+			"hp": 100,
+			"id": 3,
+			"model": 48,
+			"model_id": "scorpion-light-tank",
+			"price": 54450
+		}
+	],
+	"mech_orders": [],
+	"mechs": [
+		{
+			"hp": 100,
+			"model": 0,
+			"model_id": "locust-lct-1v",
+			"name": "Locust LCT-1V",
+			"pilot_id": 0,
+			"ready_day": 0,
+			"repair": false,
+			"stored": false,
+			"uid": 0
+		},
+		{
+			"hp": 100,
+			"model": 1,
+			"model_id": "shadow-hawk-shd-2h",
+			"name": "Shadow Hawk SHD-2H",
+			"pilot_id": 1,
+			"ready_day": 0,
+			"repair": false,
+			"stored": false,
+			"uid": 1
+		},
+		{
+			"hp": 100,
+			"model": 2,
+			"model_id": "centurion-cn9-a",
+			"name": "Centurion CN9-A",
+			"pilot_id": 2,
+			"ready_day": 0,
+			"repair": false,
+			"stored": false,
+			"uid": 2
+		},
+		{
+			"hp": 100,
+			"model": 3,
+			"model_id": "vindicator-vnd-1r",
+			"name": "Vindicator VND-1R",
+			"pilot_id": 3,
+			"ready_day": 0,
+			"repair": false,
+			"stored": false,
+			"uid": 3
+		}
+	],
+	"military": {
+		"archive": [],
+		"current": {
+			"contract": "Escolta de convoy",
+			"decision": false,
+			"elapsed": 1,
+			"encountered": false,
+			"id": 1,
+			"leader": "Elena Voss",
+			"orders": {
+				"approach": "direct",
+				"authority": "delegate",
+				"priority": "objective"
+			},
+			"pending_order": {
+
+			},
+			"phase": "Aproximación",
+			"private": {
+				"bonus": 0,
+				"damage": 0,
+				"obstacle": 2,
+				"severity": 1
+			},
+			"reports": [
+				{
+					"day": 0,
+					"source": "Elena Voss",
+					"text": "Órdenes recibidas. Iniciamos aproximación. El plazo es estimativo; fuerzas enemigas no confirmadas."
+				},
+				{
+					"day": 1,
+					"source": "Elena Voss",
+					"text": "La fuerza avanza hacia el área asignada. Sin contacto confirmado todavía."
+				}
+			],
+			"response": "",
+			"started": 0,
+			"team": [
+				{
+					"hp": 100,
+					"name": "Locust LCT-1V",
+					"uid": 0
+				},
+				{
+					"hp": 100,
+					"name": "Shadow Hawk SHD-2H",
+					"uid": 1
+				},
+				{
+					"hp": 100,
+					"name": "Centurion CN9-A",
+					"uid": 2
+				},
+				{
+					"hp": 100,
+					"name": "Vindicator VND-1R",
+					"uid": 3
+				}
+			]
+		},
+		"plan": {
+			"approach": "direct",
+			"authority": "delegate",
+			"priority": "objective"
+		},
+		"seed": 420,
+		"sequence": 1
+	},
+	"missed_payrolls": 0,
+	"missions": {
+		"archive": [],
+		"offers": [
+			{
+				"advance": 19250,
+				"briefing": "Completo: 75% o más; parcial: 35–74%. Cinco jornadas efectivas; las maniobras pueden prolongar la exposición.",
+				"cause": "Solicitud local: cobertura y logística pendientes",
+				"days": 5,
+				"deadline": 5,
+				"difficulty": 9,
+				"employer": "ComStar",
+				"employer_id": "lore-comstar",
+				"expires": 14,
+				"failure_pay": 11550,
+				"id": 200000010,
+				"intel": "Presencia hostil posible; composición sin confirmar.",
+				"min_force": 2,
+				"mission_type": "recon",
+				"name": "Reconocimiento de zona · Galatea",
+				"objective": "Relevar sectores y regresar con información",
+				"partial_pay": 46200,
+				"pay": 77000,
+				"reliability": "estimativa",
+				"system_id": "sarna-918",
+				"terrain": "colinas"
+			},
+			{
+				"advance": 20250,
+				"briefing": "Completo: 75% o más; parcial: 35–74%. Cinco jornadas efectivas; las maniobras pueden prolongar la exposición.",
+				"cause": "Solicitud local: cobertura y logística pendientes",
+				"days": 5,
+				"deadline": 5,
+				"difficulty": 9,
+				"employer": "Casa Steiner",
+				"employer_id": "lore-steiner",
+				"expires": 14,
+				"failure_pay": 12150,
+				"id": 200000011,
+				"intel": "Presencia hostil posible; composición sin confirmar.",
+				"min_force": 2,
+				"mission_type": "extraction",
+				"name": "Rescate y extracción · Galatea",
+				"objective": "Abrir acceso y evacuar grupos",
+				"partial_pay": 48600,
+				"pay": 81000,
+				"reliability": "estimativa",
+				"system_id": "sarna-918",
+				"terrain": "urbano"
+			},
+			{
+				"advance": 21250,
+				"briefing": "Completo: 75% o más; parcial: 35–74%. Cinco jornadas efectivas; las maniobras pueden prolongar la exposición.",
+				"cause": "Solicitud local: cobertura y logística pendientes",
+				"days": 5,
+				"deadline": 5,
+				"difficulty": 9,
+				"employer": "ComStar",
+				"employer_id": "lore-comstar",
+				"expires": 14,
+				"failure_pay": 12750,
+				"id": 200000012,
+				"intel": "Presencia hostil posible; composición sin confirmar.",
+				"min_force": 2,
+				"mission_type": "defense",
+				"name": "Defensa de instalación · Galatea",
+				"objective": "Conservar la integridad de la instalación",
+				"partial_pay": 51000,
+				"pay": 85000,
+				"reliability": "estimativa",
+				"system_id": "sarna-918",
+				"terrain": "llanura"
+			},
+			{
+				"advance": 22250,
+				"briefing": "Completo: 75% o más; parcial: 35–74%. Cinco jornadas efectivas; las maniobras pueden prolongar la exposición.",
+				"cause": "Solicitud local: cobertura y logística pendientes",
+				"days": 5,
+				"deadline": 5,
+				"difficulty": 9,
+				"employer": "Casa Steiner",
+				"employer_id": "lore-steiner",
+				"expires": 14,
+				"failure_pay": 13350,
+				"id": 200000013,
+				"intel": "Presencia hostil posible; composición sin confirmar.",
+				"min_force": 2,
+				"mission_type": "interdiction",
+				"name": "Interdicción de convoy · Galatea",
+				"objective": "Localizar el convoy y detener transportes",
+				"partial_pay": 53400,
+				"pay": 89000,
+				"reliability": "estimativa",
+				"system_id": "sarna-918",
+				"terrain": "llanura"
+			},
+			{
+				"advance": 23250,
+				"briefing": "Completo: 75% o más; parcial: 35–74%. Cinco jornadas efectivas; las maniobras pueden prolongar la exposición.",
+				"cause": "Solicitud local: cobertura y logística pendientes",
+				"days": 5,
+				"deadline": 5,
+				"difficulty": 9,
+				"employer": "ComStar",
+				"employer_id": "lore-comstar",
+				"expires": 14,
+				"failure_pay": 13950,
+				"id": 200000014,
+				"intel": "Presencia hostil posible; composición sin confirmar.",
+				"min_force": 2,
+				"mission_type": "recovery",
+				"name": "Recuperación de material · Galatea",
+				"objective": "Asegurar el lugar y transportar material",
+				"partial_pay": 55800,
+				"pay": 93000,
+				"reliability": "estimativa",
+				"system_id": "sarna-918",
+				"terrain": "urbano"
+			}
+		],
+		"regions": {
+			"sarna-918": {
+				"intel": 0,
+				"last_day": 0,
+				"pressure": 3,
+				"supply": 0
+			}
+		},
+		"seed": 420,
+		"sequence": 1,
+		"tactic": "careful"
+	},
+	"morale": 70,
+	"next_issue_id": 0,
+	"next_market_id": 4,
+	"next_mech_uid": 4,
+	"next_order_id": 0,
+	"next_staff_id": 6,
+	"offers": [
+		{
+			"advance": 20000,
+			"days": 5,
+			"deadline": 14,
+			"difficulty": 7,
+			"employer": "Milicia local",
+			"employer_id": "local_militia",
+			"expires": 14,
+			"failure_pay": 12000,
+			"id": 1,
+			"intel": "Informes fragmentarios de fuerzas móviles",
+			"min_force": 3,
+			"name": "Patrulla fronteriza",
+			"pay": 80000,
+			"reliability": "Media"
+		},
+		{
+			"advance": 28750,
+			"days": 7,
+			"deadline": 14,
+			"difficulty": 9,
+			"employer": "Enlace de la Casa Davion",
+			"employer_id": "davion_liaison",
+			"expires": 14,
+			"failure_pay": 17250,
+			"id": 2,
+			"intel": "Defensas preparadas probables",
+			"min_force": 3,
+			"name": "Incursión a depósito",
+			"pay": 115000,
+			"reliability": "Baja"
+		}
+	],
+	"opening_balance": 240000,
+	"orders": [],
+	"ownership_debt": 0,
+	"ownership_due": 345,
+	"relationships": {
+
+	},
+	"repair_queue": [],
+	"reputation": 0,
+	"rng_state": "8275481559231823718",
+	"rpg": {
+		"adventures": {
+			"cases": [],
+			"cooldowns": {
+
+			},
+			"next": 1
+		},
+		"agenda": {
+			"contacts": {
+
+			},
+			"cooldowns": {
+
+			},
+			"goals": [],
+			"history": [],
+			"jobs": [],
+			"next": 1
+		},
+		"arcs": {
+			"completed": [],
+			"current": {
+
+			},
+			"retired": false,
+			"settings": {
+				"danger": 100,
+				"economy": 100,
+				"frequency": 14
+			}
+		},
+		"captain": {
+			"bond": 0,
+			"configured": true,
+			"id": "captain",
+			"motivation": "proteccion",
+			"origin": "oficial",
+			"skills": {
+				"investigacion": 2,
+				"mando": 3,
+				"trato": 3
+			},
+			"specialty": "trato"
+		},
+		"cargo": {
+			"base_pay": 0,
+			"choice": "",
+			"contract_id": -1,
+			"evidence": false,
+			"extra": false,
+			"outcome": "",
+			"prepared": [],
+			"stage": "available"
+		},
+		"circle": [
+			0,
+			4,
+			5
+		],
+		"conflicts": {
+			"regions": {
+				"sarna-918": {
+					"actors": [
+						"Milicia local",
+						"Enlace de la Casa Davion"
+					],
+					"interventions": 0,
+					"last": 1,
+					"next_action": 1,
+					"reports": [
+						{
+							"day": 1,
+							"source": "Boletín de tránsito",
+							"text": "Disputa por prioridad de transporte y suministros. Los enlaces solicitan seguridad y mediación; se desconoce la capacidad de quienes amenazan la ruta."
+						}
+					],
+					"resources": 4,
+					"started": 1,
+					"status": "active",
+					"system": "sarna-918",
+					"tension": 5
+				}
+			}
+		},
+		"delegation": {
+			"archive": [],
+			"jobs": [],
+			"next": 1,
+			"reputation": {
+
+			}
+		},
+		"director": {
+			"last": 0,
+			"pending": {
+
+			},
+			"seen": [],
+			"summaries": []
+		},
+		"jobs": [],
+		"journal": [
+			{
+				"day": 0,
+				"kind": "Identidad",
+				"text": "Capitana de prueba establece su trasfondo: Antiguo oficial; especialidad Trato; motivación: Proteger a mi gente. El vínculo se establece desde hoy, sin recuerdos retroactivos."
+			},
+			{
+				"day": 1,
+				"kind": "Región · Galatea",
+				"text": "Boletín de tránsito: Disputa por prioridad de transporte y suministros. Los enlaces solicitan seguridad y mediación; se desconoce la capacidad de quienes amenazan la ruta."
+			}
+		],
+		"negotiation": {
+			"drafts": {
+
+			},
+			"salvage": [],
+			"settled": []
+		},
+		"results": [],
+		"revision": 25,
+		"scene": "",
+		"seed": 420,
+		"sequence": 0,
+		"social": {
+			"cargo_settled": false,
+			"milestones": [],
+			"perks": [],
+			"promises": [],
+			"talked": {
+
+			},
+			"ties": {
+				"0": {
+					"memories": [],
+					"name": "Elena Voss",
+					"respect": 0,
+					"trust": 1,
+					"value": "proteger"
+				},
+				"4": {
+					"memories": [],
+					"name": "Ada Ferrer",
+					"respect": 0,
+					"trust": 0,
+					"value": "mantener"
+				},
+				"5": {
+					"memories": [],
+					"name": "Jules Aran",
+					"respect": 0,
+					"trust": 0,
+					"value": "cumplir"
+				}
+			},
+			"xp": 0
+		},
+		"workshop": {
+			"faults": {
+
+			},
+			"jobs": [],
+			"last_order": -14,
+			"parts": {
+				"electronics": 0,
+				"mobility": 0
+			},
+			"policy": {
+				"cash": 0,
+				"routine": false,
+				"supplies": 0
+			},
+			"reserved": [],
+			"support_until": 0
+		}
+	},
+	"scenario_year": 3060,
+	"staff": [
+		{
+			"experience": 0,
+			"fatigue": 0,
+			"id": 0,
+			"injury": 0,
+			"last_care_event": -100,
+			"memories": [],
+			"missions": 0,
+			"name": "Elena Voss",
+			"promotions": 0,
+			"rest_until": 0,
+			"role": "Piloto",
+			"salary": 6000,
+			"skill": 3,
+			"victories": 0
+		},
+		{
+			"experience": 0,
+			"fatigue": 0,
+			"id": 1,
+			"injury": 0,
+			"last_care_event": -100,
+			"memories": [],
+			"missions": 0,
+			"name": "Tomás Ríos",
+			"promotions": 0,
+			"rest_until": 0,
+			"role": "Piloto",
+			"salary": 6000,
+			"skill": 4,
+			"victories": 0
+		},
+		{
+			"experience": 0,
+			"fatigue": 0,
+			"id": 2,
+			"injury": 0,
+			"last_care_event": -100,
+			"memories": [],
+			"missions": 0,
+			"name": "Mara Chen",
+			"promotions": 0,
+			"rest_until": 0,
+			"role": "Piloto",
+			"salary": 6000,
+			"skill": 3,
+			"victories": 0
+		},
+		{
+			"experience": 0,
+			"fatigue": 0,
+			"id": 3,
+			"injury": 0,
+			"last_care_event": -100,
+			"memories": [],
+			"missions": 0,
+			"name": "Idris Vale",
+			"promotions": 0,
+			"rest_until": 0,
+			"role": "Piloto",
+			"salary": 6000,
+			"skill": 4,
+			"victories": 0
+		},
+		{
+			"experience": 0,
+			"fatigue": 0,
+			"id": 4,
+			"injury": 0,
+			"last_care_event": -100,
+			"memories": [],
+			"missions": 0,
+			"name": "Ada Ferrer",
+			"promotions": 0,
+			"rest_until": 0,
+			"role": "Jefa técnica",
+			"salary": 8000,
+			"skill": 4,
+			"victories": 0
+		},
+		{
+			"experience": 0,
+			"fatigue": 0,
+			"id": 5,
+			"injury": 0,
+			"last_care_event": -100,
+			"memories": [],
+			"missions": 0,
+			"name": "Jules Aran",
+			"promotions": 0,
+			"rest_until": 0,
+			"role": "Logística",
+			"salary": 5000,
+			"skill": 3,
+			"victories": 0
+		}
+	],
+	"supplies": 50,
+	"travel": {
+
+	},
+	"version": 23,
+	"world": {
+		"activity_since": 0,
+		"actors": [
+			{
+				"affiliation": "Asociación comercial local",
+				"contact_day": -1,
+				"id": "trade_league",
+				"interest": "Mantener entregas y reducir interrupciones comerciales.",
+				"kind": "Contratante",
+				"name": "Liga comercial",
+				"private": {
+					"capacity": 3,
+					"commitments": [],
+					"demand": 2,
+					"funds": 450000,
+					"priority": "secure_routes",
+					"ready_day": 0,
+					"standing": {
+
+					}
+				},
+				"reported_day": 0,
+				"source": "Registro local: especialidad e intereses declarados; no verificados independientemente.",
+				"specialty": "Protección de rutas"
+			},
+			{
+				"affiliation": "Autoridad local de la campaña",
+				"contact_day": -1,
+				"id": "local_militia",
+				"interest": "Proteger instalaciones y sostener presencia en zonas periféricas.",
+				"kind": "Contratante",
+				"name": "Milicia local",
+				"private": {
+					"capacity": 4,
+					"commitments": [],
+					"demand": 2,
+					"funds": 350000,
+					"priority": "secure_facilities",
+					"ready_day": 0,
+					"standing": {
+
+					}
+				},
+				"reported_day": 0,
+				"source": "Registro local: especialidad e intereses declarados; no verificados independientemente.",
+				"specialty": "Seguridad territorial"
+			},
+			{
+				"affiliation": "Oficina ficticia vinculada a la Casa Davion",
+				"contact_day": -1,
+				"id": "davion_liaison",
+				"interest": "Contratar fuerzas independientes para encargos concretos.",
+				"kind": "Contratante",
+				"name": "Enlace de la Casa Davion",
+				"private": {
+					"capacity": 4,
+					"commitments": [],
+					"demand": 2,
+					"funds": 600000,
+					"priority": "build_influence",
+					"ready_day": 0,
+					"standing": {
+
+					}
+				},
+				"reported_day": 0,
+				"source": "Registro local: especialidad e intereses declarados; no verificados independientemente.",
+				"specialty": "Contratación militar"
+			},
+			{
+				"affiliation": "Cooperativa industrial local",
+				"contact_day": -1,
+				"id": "workshop_consortium",
+				"interest": "Proteger depósitos y mantener acceso a suministros y reparaciones.",
+				"kind": "Contratante",
+				"name": "Consorcio de talleres",
+				"private": {
+					"capacity": 2,
+					"commitments": [],
+					"demand": 2,
+					"funds": 300000,
+					"priority": "protect_supply",
+					"ready_day": 0,
+					"standing": {
+
+					}
+				},
+				"reported_day": 0,
+				"source": "Registro local: especialidad e intereses declarados; no verificados independientemente.",
+				"specialty": "Protección industrial"
+			},
+			{
+				"affiliation": "Mercenarios independientes",
+				"contact_day": -1,
+				"id": "grey_lances",
+				"interest": "Conseguir contratos de protección de rutas.",
+				"kind": "Compañía rival",
+				"name": "Lanzas Grises",
+				"private": {
+					"capacity": 3,
+					"commitments": [],
+					"demand": 0,
+					"funds": 160000,
+					"priority": "seek_escort",
+					"ready_day": 0,
+					"standing": {
+
+					}
+				},
+				"reported_day": 0,
+				"source": "Registro local: especialidad e intereses declarados; no verificados independientemente.",
+				"specialty": "Escoltas y seguridad de convoyes"
+			},
+			{
+				"affiliation": "Mercenarios independientes",
+				"contact_day": -1,
+				"id": "iron_watch",
+				"interest": "Buscar encargos de seguridad de larga duración.",
+				"kind": "Compañía rival",
+				"name": "Guardia de Hierro",
+				"private": {
+					"capacity": 4,
+					"commitments": [],
+					"demand": 0,
+					"funds": 220000,
+					"priority": "seek_garrison",
+					"ready_day": 0,
+					"standing": {
+
+					}
+				},
+				"reported_day": 0,
+				"source": "Registro local: especialidad e intereses declarados; no verificados independientemente.",
+				"specialty": "Guarnición y protección de instalaciones"
+			},
+			{
+				"affiliation": "Mercenarios independientes",
+				"contact_day": -1,
+				"id": "ember_company",
+				"interest": "Priorizar trabajos cortos y de mayor remuneración.",
+				"kind": "Compañía rival",
+				"name": "Compañía Ascua",
+				"private": {
+					"capacity": 2,
+					"commitments": [],
+					"demand": 0,
+					"funds": 130000,
+					"priority": "seek_raids",
+					"ready_day": 0,
+					"standing": {
+
+					}
+				},
+				"reported_day": 0,
+				"source": "Registro local: especialidad e intereses declarados; no verificados independientemente.",
+				"specialty": "Incursiones y operaciones breves"
+			}
+		],
+		"bulletins": [],
+		"introduced_day": 0,
+		"last_day": 1,
+		"links": [
+			{
+				"a": "trade_league",
+				"b": "workshop_consortium",
+				"public": true,
+				"reported_day": 0,
+				"source": "Declaración conjunta registrada",
+				"stance": "Cooperación comercial"
+			},
+			{
+				"a": "local_militia",
+				"b": "iron_watch",
+				"public": true,
+				"reported_day": 0,
+				"source": "Referencias declaradas por Guardia de Hierro",
+				"stance": "Antecedentes de contratación"
+			},
+			{
+				"a": "grey_lances",
+				"b": "ember_company",
+				"public": true,
+				"reported_day": 0,
+				"source": "Evaluación inicial de la oficina de contratación",
+				"stance": "Competencia por encargos"
+			}
+		]
+	}
+}

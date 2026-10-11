@@ -1,0 +1,27 @@
+extends SceneTree
+const C=preload("res://sim/campaign.gd")
+func _initialize():
+ var s=C.new(19)
+ s.rpg_command("configure",{"origin":"oficial","specialty":"mando","motivation":"proteccion"})
+ var contact=s.RPG.Agenda.known(s)[0]
+ s.rpg_command("agenda",{"action":"goal","person":0})
+ s.rpg_command("agenda",{"action":"visit","contact":contact,"person":4})
+ assert(not s.person_available(s.person_by_id(4)))
+ assert(not s.RPG.busy(s))
+ s.rpg_command("agenda",{"action":"audience","contact":contact})
+ assert(s.RPG.busy(s) and s.state.rpg.agenda.jobs.size()==2)
+ assert(s.save_game("user://rpg19.json")==OK)
+ var loaded=C.new()
+ assert(loaded.load_game("user://rpg19.json")==OK and loaded.state==s.state)
+ s.advance(2)
+ assert(s.state.rpg.agenda.contacts[contact].favors==1)
+ assert(s.state.rpg.agenda.goals[0].status=="completed")
+ assert(s.state.rpg.agenda.jobs.is_empty())
+ var money=s.state.funds
+ s.rpg_command("agenda",{"action":"visit","contact":contact})
+ assert(s.state.funds==money)
+ s.rpg_command("agenda",{"action":"proposal","contact":contact})
+ s.advance(2)
+ assert(s.state.rpg.adventures.cases.size()==1)
+ print("v0.19: iniciativa, delegación reservada, concurrencia, meta, propuesta y persistencia OK")
+ quit()

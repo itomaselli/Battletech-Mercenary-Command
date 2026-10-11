@@ -1,0 +1,10 @@
+.godot/
+exports/
+.DS_Store
+*.tmp
+releases/
+.build/
+__pycache__/
+*.pyc
+*.pck
+export_credentials.cfg

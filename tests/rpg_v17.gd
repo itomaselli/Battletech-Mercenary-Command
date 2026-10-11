@@ -1,0 +1,32 @@
+extends SceneTree
+const C=preload("res://sim/campaign.gd")
+func _initialize():
+ var s=C.new(1)
+ s.rpg_command("configure",{"origin":"mercenario","specialty":"trato","motivation":"deuda","bond":0})
+ assert(s.state.rpg.social.ties.size()==s.state.staff.size())
+ assert(s.state.rpg.social.ties["0"].trust==1)
+ s.rpg_command("social",{"action":"talk","person":0,"topic":"explain"})
+ assert(s.state.rpg.jobs.size()==1)
+ s.advance(1)
+ assert(s.state.rpg.social.ties["0"].respect==1)
+ assert(s.state.rpg.social.xp==0)
+ assert(s.rpg_command("social",{"action":"talk","person":0}).contains("período"))
+ s.RPG.Social.milestone(s,"test",2)
+ s.RPG.Social.milestone(s,"test",2)
+ assert(s.state.rpg.social.xp==2)
+ assert(s.rpg_command("social",{"action":"learn","perk":"analista"}).contains("aprendida"))
+ var skill=s.state.rpg.captain.skills.investigacion
+ s.rpg_command("social",{"action":"learn","perk":"analista"})
+ assert(s.state.rpg.captain.skills.investigacion==skill)
+ s.RPG.Social.promise_people(s)
+ s.state.rpg.cargo.choice="people"
+ s.state.rpg.cargo.outcome="partial"
+ s.RPG.Social.settle_cargo(s)
+ assert(s.state.rpg.social.promises[0].status=="kept")
+ s.dismiss(0)
+ assert(s.state.rpg.social.ties.has("0"))
+ assert(s.save_game("user://rpg17.json")==OK)
+ var loaded=C.new()
+ assert(loaded.load_game("user://rpg17.json")==OK and loaded.state==s.state)
+ print("v0.17: conversación, respeto, promesa, hitos únicos, progresión y memoria de bajas OK")
+ quit()

@@ -1,0 +1,31 @@
+extends SceneTree
+const C=preload("res://sim/campaign.gd")
+func _initialize():
+ var s=C.new(36)
+ s.rpg_command("configure",{"origin":"mercenario","specialty":"trato","motivation":"deuda"})
+ s.rpg_command("story_objective",{"action":"choose","kind":"person","person":0})
+ s.rpg_command("story_objective",{"action":"delegate","officer":4})
+ assert(s.Story.Objectives.busy(s,0) and s.Story.Objectives.busy(s,4) and not s.RPG.busy(s))
+ assert(s.travel_quote(s.Universe.galatea()).has("error"))
+ var money=s.state.funds
+ s.rpg_command("story_objective",{"action":"material"})
+ assert(s.state.funds==money)
+ assert(s.save_game("user://story36.json")==OK)
+ var loaded=C.new()
+ assert(loaded.load_game("user://story36.json")==OK and loaded.state==s.state)
+ s.advance(2);loaded.advance(2)
+ assert(s.state==loaded.state)
+ assert(s.Story.Objectives.current(s).progress==1 and s.person_by_id(0).experience==1)
+ for i in range(2):
+  s.rpg_command("story_objective",{"action":"material"});s.advance(2)
+ assert(s.Story.Objectives.current(s).is_empty() and s.person_by_id(0).experience==3)
+ s.rpg_command("story_objective",{"action":"choose","kind":"community"})
+ var supplies=s.state.supplies
+ s.rpg_command("story_objective",{"action":"material"})
+ assert(s.state.supplies==supplies-10)
+ s.rpg_command("story_objective",{"action":"material"})
+ assert(s.state.supplies==supplies-10)
+ s.rpg_command("story_objective",{"action":"abandon"})
+ assert(s.state.supplies==supplies-10 and s.Story.Objectives.current(s).is_empty())
+ print("v0.36: objetivos, delegación, reservas, alternativas, progreso, costes y reanudación OK")
+ quit()
