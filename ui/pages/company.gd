@@ -16,11 +16,19 @@ static func draw(host):
   var id_key="id" if personal else "uid"
   var chosen=int(host.preference(id_key,entries[0][id_key] if not entries.is_empty() else -1))
   if not entries.any(func(e):return e[id_key]==chosen) and not entries.is_empty():chosen=int(entries[0][id_key])
-  var panes=UI.split(body,host.size.x)
+  var panes=UI.split(body,host.size.x) if personal or host.section=="Taller" else UI.workspace(body,host)
   var interval=UI.pager(panes[0],entries.size(),maxi(0,int(entries.map(func(e):return e[id_key]).find(chosen)/7)),7,func(page):host.remember("page",page);host.remember(id_key,entries[page*7][id_key]);host.render())
   UI.text(panes[0],"Personas" if personal else "Unidades",true)
+  var cards=GridContainer.new();cards.columns=2 if not personal and host.section=="Hangar" else 1
+  cards.add_theme_constant_override("h_separation",10);cards.add_theme_constant_override("v_separation",10)
+  panes[0].add_child(cards)
   for e in entries.slice(interval[0],interval[1]):
-   var b=UI.button(panes[0],"%s · %s"%[e.name,e.role if personal else str(e.hp)+"%"],func():host.remember(id_key,e[id_key]);host.render())
+   var holder=UI.column(cards)
+   if not personal:
+    holder=UI.block(holder,e.name)
+    UI.unit_icon(holder,sim.MECH_CATALOG[e.model])
+    UI.muted(holder,"Almacenado" if e.stored else "Desplegado" if sim.deployed(sim.mech_index(e.uid)) else "En reparación" if e.repair else "En base")
+   var b=UI.button(holder,"%s · %s"%[e.name,e.role if personal else str(e.hp)+"%"],func():host.remember(id_key,e[id_key]);host.render())
    b.toggle_mode=true;b.button_pressed=e[id_key]==chosen
   var found=entries.filter(func(e):return e[id_key]==chosen)
   if found.is_empty():UI.text(panes[1],"Sin coincidencias.");return

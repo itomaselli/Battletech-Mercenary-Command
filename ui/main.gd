@@ -43,7 +43,7 @@ func _ready():
  for side in ["left","right","top","bottom"]:margin.add_theme_constant_override("margin_"+side,14)
  add_child(margin)
  var root=UI.column(margin)
- title=UI.text(root,"MERCENARY COMMAND · v0.44",true)
+ title=UI.text(root,"MERCENARY COMMAND · v0.45",true)
  stats=UI.text(root,"")
  var top=HFlowContainer.new();root.add_child(top)
  UI.muted(top,"CALENDARIO")
@@ -118,6 +118,7 @@ func render():
  admin.sim=sim
  operations_adapter.sim=sim
  rpg_adapter.sim=sim
+ title.text=sim.state.company_name.to_upper()+" · Cap. "+sim.state.captain_name if has_campaign else "MERCENARY COMMAND · v0.45"
  stats.text="%s · %s · fondos libres %d · suministros %d"%[sim.date_text(),sim.Universe.system(sim.state.location_id).name,sim.available_funds(),sim.state.supplies]
  continue_button.disabled=not has_campaign or wizard!=null or (route=="Operaciones" and section=="Batalla" and not sim.battle_view().is_empty() and not sim.battle_view().done)
  continue_button.tooltip_text="Vuelva a Resumen para avanzar días y delegar el encuentro." if route=="Operaciones" and section=="Batalla" else "Avanza el calendario de campaña; se detiene ante informes o decisiones."
@@ -137,7 +138,7 @@ func render():
  match route:
   "Mando":mando()
   "Compañía":company()
-  "Finanzas":admin.finance_page(content)
+  "Finanzas":preload("res://ui/pages/finance.gd").draw(self)
   "Campaña":campaign_page()
   "Operaciones":preload("res://ui/pages/operations.gd").draw(self)
   "Mercado":preload("res://ui/pages/market.gd").draw(self)
@@ -179,7 +180,7 @@ func mando():
   for module in ["agenda","workshop","delegation"]:
    for job in sim.state.rpg[module].jobs:UI.text(content,"Día %d · %s · %s"%[job.due,module,sim.person_name(job.get("person",-1))])
  else:
-  UI.text(content,sim.state.company_name+" · Capitán "+sim.state.captain_name)
+  preload("res://ui/pages/desk.gd").draw(self)
   preload("res://ui/pages/inbox.gd").draw(self)
 func company():
  preload("res://ui/pages/company.gd").draw(self)
@@ -260,6 +261,6 @@ func section_title() -> String:
  if route=="Operaciones" and section in ["Resumen","Plan","Batalla"] and not sim.state.accepted.is_empty():return section+" · "+sim.state.accepted.name
  return route+" / "+section
 func section_hint() -> String:
- var hints={"Operaciones/Resumen":"Estado del contrato y próximo paso.","Operaciones/Contratos":"Compare ofertas y abra una para decidir.","Operaciones/Plan":"Elija fuerza y mando antes de autorizar el despliegue.","Operaciones/Batalla":"Observe el encuentro y dé órdenes. Estos controles usan el reloj táctico, no el calendario.","Operaciones/Informe":"Resultados de las operaciones cerradas y sus partes.","Compañía/Personal":"Seleccione una persona para consultar su situación y actuar sobre su expediente.","Compañía/Hangar":"Seleccione una unidad para ver disponibilidad, asignación y mantenimiento.","Compañía/Taller":"Reparaciones por unidad y abastecimiento de la compañía.","Mando/Bandeja":"Filtre comunicaciones; abra una entrada para ver su contexto y acciones.","Mando/Crónica":"Archivo de acontecimientos de la compañía, del más reciente al más antiguo."}
+ var hints={"Operaciones/Resumen":"Estado del contrato y próximo paso.","Operaciones/Contratos":"Compare ofertas y abra una para decidir.","Operaciones/Plan":"Elija fuerza y mando antes de autorizar el despliegue.","Operaciones/Batalla":"Observe el encuentro y dé órdenes. Estos controles usan el reloj táctico, no el calendario.","Operaciones/Informe":"Resultados de las operaciones cerradas y sus partes.","Compañía/Personal":"Seleccione una persona para consultar su situación y actuar sobre su expediente.","Compañía/Hangar":"Seleccione una unidad para ver disponibilidad, asignación y mantenimiento.","Compañía/Taller":"Reparaciones por unidad y abastecimiento de la compañía.","Mando/Bandeja":"Escritorio del comandante · comunicaciones, compromisos y próximos pasos.","Mando/Crónica":"Archivo de acontecimientos de la compañía, del más reciente al más antiguo."}
  hints.merge({"Finanzas/Previsión":"Caja, compromisos y próximos vencimientos de la compañía.","Mando/Agenda":"Plazos y trabajos en curso; consulte cuándo vuelven a estar disponibles sus recursos.","Operaciones/Encargos":"Delegue objetivos y presupuesto en sus oficiales.","Mercado/Unidades":"Compare ofertas y seleccione una unidad antes de comprar.","Mercado/Catálogo":"Consulte variantes y características del equipamiento.","Mercado/Repuestos":"Abastecimiento y recursos para mantener la fuerza operativa.","Mercado/Personal":"Revise candidatos y condiciones de contratación.","Mundo/Atlas":"Seleccione un sistema para consultar su contexto y planificar un traslado.","Mundo/Entorno":"Información disponible sobre el sistema actual.","Mundo/Región":"Conflictos y acontecimientos regionales conocidos.","Mundo/Contactos":"Enlaces y relaciones disponibles para la compañía.","Capitán/Personaje":"Identidad, capacidades y vínculos de su personaje.","Capitán/Asuntos":"Investigaciones e iniciativas del capitán; cada bloque reúne sus propias acciones.","Capitán/Legado":"Trayectoria y decisiones sobre el futuro del mando.","Campaña/Partidas":"Cree una carrera o seleccione una partida guardada.","Campaña/Identidad":"Nombres de la compañía y del capitán.","Campaña/Opciones":"Legibilidad y efectos visuales del terminal."})
  return hints.get(key(),"Seleccione una entrada o una sección para consultar sus detalles.")

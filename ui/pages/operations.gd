@@ -71,38 +71,74 @@ static func prepare(host):
  if not sim.state.active.is_empty():
   UI.text(host.content,"La fuerza ya está desplegada. Ajuste sus órdenes desde Batalla.")
   UI.primary(host.content,"Abrir batalla →",func():host.navigate("Operaciones","Batalla"));return
- var mission=UI.block(host.content,"1 · Compromiso",sim.state.accepted.name)
- var force=UI.block(host.content,"2 · Fuerza de despliegue","Seleccione hasta cuatro unidades; el orden define Alfa y Bravo.")
- UI.text(mission,"Desplegar antes del día %d. Mínimo %d unidades. Máximo cuatro."%[sim.state.accepted.deadline,sim.state.accepted.min_force])
- for m in sim.state.mechs:
-  var i=sim.mech_index(m.uid)
-  var person=sim.pilot_for(i)
-  var eligible=sim.mech_ready(i) and m.hp>=40 and not m.repair and sim.person_available(person) and not sim.deployed(i)
-  if not eligible:host.selected.erase(m.uid)
-  var check=CheckBox.new();check.text="%s · %d%% · %s"%[m.name,m.hp,"sin asignar" if person.is_empty() else person.name];check.disabled=not eligible;check.button_pressed=m.uid in host.selected;force.add_child(check)
-  check.toggled.connect(func(on):
-   if on and host.selected.size()<4:host.selected.append(m.uid)
-   elif on:check.set_pressed_no_signal(false)
-   else:host.selected.erase(m.uid))
- var command=UI.block(host.content,"3 · Mando y autorización")
- var doctrine=UI.picker(command,"Doctrina",{0:"Cautelosa · +1 día",1:"Equilibrada",2:"Agresiva · mayor desgaste"},host.doctrine)
- doctrine.item_selected.connect(func(i):host.doctrine=int(doctrine.get_item_metadata(i)))
- var leaders={-1:"Primera persona de la fuerza seleccionada"}
- for p in sim.state.staff:
-  if p.role in ["Piloto","Dotación"]:leaders[p.id]=p.name
- var leader=UI.picker(command,"Jefe de operación",leaders,host.leader_id)
- leader.item_selected.connect(func(i):host.leader_id=int(leader.get_item_metadata(i)))
- var rules=UI.disclosure(command,"Condiciones y organización de la fuerza")
- UI.text(rules,"El cumplimiento parcial paga el importe parcial del contrato o, si no tiene uno específico, el 60% del total; el anticipo se descuenta al liquidar.")
- UI.text(rules,"Mapa de mando: Alfa agrupa las primeras dos unidades seleccionadas y Bravo las restantes. Puede pausar al inicio para enviar planes por sector, dejar reservas o delegar. La doctrina fija la actitud inicial; cautelosa permite retiradas autónomas por daños según los valores del piloto.")
- UI.primary(command,"Autorizar despliegue →",func():
-  var team=[]
+ var contract=sim.state.accepted
+ if host.preference("plan_contract",-1)!=contract.id:
+  host.remember("plan_contract",contract.id);host.remember("step",0);host.selected.clear();host.leader_id=-1
+ host.selected=host.selected.filter(func(uid):return eligible(sim,uid))
+ var step=int(host.preference("step",0))
+ var steps=HBoxContainer.new();host.content.add_child(steps)
+ UI.button(steps,"1 · Contrato",func():host.navigate("Operaciones","Contratos"))
+ for i in range(3):
+  var button=UI.button(steps,["2 · Fuerza","3 · Plan","4 · Confirmar"][i],func():host.remember("step",i);host.render())
+  button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;button.toggle_mode=true;button.button_pressed=step==i
+  button.disabled=i>0 and host.selected.size()<contract.min_force
+ for b in steps.get_children():b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;b.custom_minimum_size.x=120
+ var mission=UI.block(host.content,contract.name,"Mínimo %d · máximo 4 unidades · desplegar antes del día %d"%[contract.min_force,contract.deadline])
+ if step==0:
+  UI.text(mission,"Seleccione la fuerza. Las primeras dos unidades formarán Alfa y las siguientes Bravo.")
+  var panes=UI.workspace(host.content,host,1.8,1.0)
+  var grid=GridContainer.new();grid.columns=2;grid.add_theme_constant_override("h_separation",12);grid.add_theme_constant_override("v_separation",12);panes[0].add_child(grid)
+  UI.text(panes[1],"Fuerza seleccionada",true)
+  var next=UI.primary(panes[1],"Continuar al plan →",func():host.remember("step",1);host.render())
+  next.disabled=host.selected.size()<contract.min_force
+  var count=UI.text(panes[1],"Seleccionadas: %d / 4"%host.selected.size())
+  for m in sim.state.mechs:
+   var card=UI.block(grid,m.name)
+   UI.unit_icon(card,sim.MECH_CATALOG[m.model])
+   var person=sim.pilot_for(sim.mech_index(m.uid))
+   UI.text(card,"Integridad %d%% · %s"%[m.hp,"Sin piloto / dotación" if person.is_empty() else person.name])
+   var check=CheckBox.new();check.text="Incluir en la fuerza" if eligible(sim,m.uid) else "No disponible para desplegar";check.disabled=not eligible(sim,m.uid);check.button_pressed=m.uid in host.selected;card.add_child(check)
+   check.toggled.connect(func(on):
+    if on and host.selected.size()<4:host.selected.append(m.uid)
+    elif on:check.set_pressed_no_signal(false)
+    else:host.selected.erase(m.uid)
+    count.text="Seleccionadas: %d / 4"%host.selected.size();next.disabled=host.selected.size()<contract.min_force)
+ elif step==1:
+  var command=UI.block(host.content,"Plan y mando")
+  var doctrine=UI.picker(command,"Doctrina",{0:"Cautelosa · +1 día",1:"Equilibrada",2:"Agresiva · mayor desgaste"},host.doctrine)
+  doctrine.item_selected.connect(func(i):host.doctrine=int(doctrine.get_item_metadata(i)))
+  var leaders={-1:"Primera persona de la fuerza seleccionada"}
   for uid in host.selected:
-   var index=sim.mech_index(uid)
-   if index>=0:team.append(index)
-  host.report(sim.dispatch_battle(team,host.doctrine,host.leader_id))
-  if not sim.state.active.is_empty():host.navigate("Operaciones","Batalla"))
- UI.button(command,"Retirarse / cancelar…",func():host.cancel_contract())
+   var p=sim.pilot_for(sim.mech_index(uid))
+   if not p.is_empty():leaders[p.id]=p.name
+  if not leaders.has(host.leader_id):host.leader_id=-1
+  var leader=UI.picker(command,"Jefe de operación",leaders,host.leader_id)
+  leader.item_selected.connect(func(i):host.leader_id=int(leader.get_item_metadata(i)))
+  UI.text(command,"La doctrina fija la actitud inicial. En batalla dará órdenes por grupo y sector; los subordinados ejecutan las maniobras.")
+  UI.primary(host.content,"Revisar despliegue →",func():host.remember("step",2);host.render())
+ else:
+  var review=UI.block(host.content,"Revisión antes del despliegue")
+  for i in range(host.selected.size()):
+   var m=sim.state.mechs[sim.mech_index(host.selected[i])]
+   UI.text(review,"%s · %s · %s · %d%%"%["Alfa" if i<2 else "Bravo",m.name,sim.pilot_for(sim.mech_index(m.uid)).name,m.hp])
+  UI.text(review,"Doctrina: %s · Jefe: %s"%[["Cautelosa","Equilibrada","Agresiva"][host.doctrine],"Primera persona seleccionada" if host.leader_id<0 else sim.person_name(host.leader_id)])
+  UI.text(review,"Pago total: %d · anticipo: %d. El anticipo se descuenta al liquidar. Cumplimiento parcial: importe contractual o 60%% del total si no está especificado."%[contract.pay,contract.advance])
+  var authorize=UI.primary(host.content,"Autorizar despliegue →",func():
+   var team=[]
+   for uid in host.selected:
+    if not eligible(sim,uid):host.report("La disponibilidad cambió. Revise la fuerza.");return
+    team.append(sim.mech_index(uid))
+   host.report(sim.dispatch_battle(team,host.doctrine,host.leader_id))
+   if not sim.state.active.is_empty():host.navigate("Operaciones","Batalla"))
+  authorize.disabled=host.selected.size()<contract.min_force
+ if step>0:UI.button(host.content,"← Paso anterior",func():host.remember("step",step-1);host.render())
+ if step>0:UI.button(UI.disclosure(host.content,"Revisar compromiso contractual"),"Retirarse / cancelar…",func():host.cancel_contract())
+
+static func eligible(sim,uid) -> bool:
+ var i=sim.mech_index(uid)
+ if i<0:return false
+ var m=sim.state.mechs[i]
+ return sim.mech_ready(i) and m.hp>=40 and not m.repair and sim.person_available(sim.pilot_for(i)) and not sim.deployed(i)
 
 static func summary(host):
  var UI=host.UI;var sim=host.sim

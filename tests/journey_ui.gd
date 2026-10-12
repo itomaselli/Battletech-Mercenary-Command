@@ -12,6 +12,8 @@ func run():
  h.navigate("Operaciones","Contratos");await settle()
  button(h,"Aceptar condiciones").pressed.emit();await settle();assert(h.section=="Plan")
  for check in h.content.find_children("*","CheckBox",true,false):check.button_pressed=true
+ button(h,"Continuar al plan").pressed.emit();await settle()
+ button(h,"Revisar despliegue").pressed.emit();await settle()
  button(h,"Autorizar despliegue").pressed.emit();await settle();assert(not h.sim.state.active.is_empty() and h.section=="Batalla")
  for i in range(5):
   if h.sim.state.active.is_empty():break

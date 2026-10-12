@@ -1,6 +1,12 @@
-# BattleTech Mercenary Command — v0.44.0
+# BattleTech Mercenary Command — v0.45.0
 
 Juego personal independiente de MekHQ, en Godot 4/GDScript. Diriges una compañía desde una terminal de mando: contratas personal, preparas fuerzas, aceptas compromisos, das órdenes y recibes informes. La simulación propia conserva el estado y las consecuencias. No requiere conexión, claves ni assets descargados.
+
+## Escritorio de mando — v0.45
+
+Bandeja con agenda compacta y paneles independientes; preparación de operaciones por fuerza, plan y confirmación; hangar de tarjetas con expediente lateral; finanzas divididas en previsión, movimientos y categorías; mapas con contexto y acciones laterales. Conserva todos los sprites y reglas de simulación existentes.
+
+[Plan, alcance y validación](docs/UX-v045.md). El mapa local sigue siendo ilustrativo; los encuentros jugables se observan en Batalla.
 
 ## Organización de pantallas — v0.44
 

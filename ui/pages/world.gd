@@ -1,7 +1,23 @@
 extends RefCounted
 static func draw(host):
  if host.section=="Entorno":
-  var atlas=preload("res://ui/atlas.gd").new();host.content.add_child(atlas);atlas.map.custom_minimum_size.y=340;atlas.animation=host.settings.animation;atlas.refresh(host.sim);return
+  var panes=host.UI.workspace(host.content,host,1.8,1.0)
+  panes[0].size_flags_stretch_ratio=1.8
+  var atlas=preload("res://ui/atlas.gd").new();panes[0].add_child(atlas);atlas.map.custom_minimum_size.y=220;atlas.animation=host.settings.animation;atlas.refresh(host.sim)
+  atlas.crew.get_parent().hide()
+  var context=host.UI.block(panes[1],"Oportunidades y comunicaciones")
+  host.UI.text(context,"Entorno ilustrativo del sistema actual. Las posiciones de combate se consultan en Batalla.")
+  if not host.sim.state.accepted.is_empty():
+   host.UI.text(context,host.sim.state.accepted.name,true)
+   host.UI.primary(context,"Seguir contrato →",func():host.navigate("Operaciones","Resumen"))
+  else:host.UI.primary(context,"Revisar contratos →",func():host.navigate("Operaciones","Contratos"))
+  var local=host.sim.state.story.society.pending
+  if not local.is_empty():
+   host.UI.text(context,local.text)
+   host.UI.button(context,"Responder al enlace →",func():host.navigate("Mando","Bandeja");host.remember("entry","local:"+local.key);host.render())
+  host.UI.button(context,"Consultar región →",func():host.navigate("Mundo","Región"))
+  host.UI.button(context,"Abrir comunicaciones →",func():host.navigate("Mando","Bandeja"))
+  return
  if host.section=="Región":
   preload("res://ui/story.gd").society(host,host.content)
   host.rpg_sections(host.content,"Región");return
@@ -9,20 +25,22 @@ static func draw(host):
  var UI=host.UI
  var sim=host.sim
  UI.text(host.content,"Afiliaciones de referencia: %s · escenario %d. No cambia fronteras canónicas."%[sim.Universe.load_data().reference_dates[str(sim.state.scenario_year)],sim.state.scenario_year])
- var search=LineEdit.new();search.placeholder_text="Buscar sistema o alias";search.text=host.preference("query","");host.content.add_child(search)
- var results=ItemList.new();results.custom_minimum_size.y=130;host.content.add_child(results)
+ var panes=UI.workspace(host.content,host,1.8,1.0)
+ panes[0].size_flags_stretch_ratio=1.8
+ var search=LineEdit.new();search.placeholder_text="Buscar sistema o alias";search.text=host.preference("query","");panes[0].add_child(search)
+ var results=ItemList.new();results.custom_minimum_size.y=90;panes[0].add_child(results)
  var fill=func(q):
   results.clear()
   var matches=sim.Universe.find_systems(q,sim.state.scenario_year).slice(0,100)
   for p in matches:results.add_item(p.name);results.set_item_metadata(results.item_count-1,p.id)
  search.text_changed.connect(func(q):host.remember("query",q);fill.call(q));fill.call(search.text)
- var map=preload("res://ui/star_map.gd").new();map.year=sim.state.scenario_year;map.location_id=sim.state.location_id;map.size_flags_horizontal=Control.SIZE_EXPAND_FILL;host.content.add_child(map);map.custom_minimum_size=Vector2(0,360)
+ var map=preload("res://ui/star_map.gd").new();map.year=sim.state.scenario_year;map.location_id=sim.state.location_id;map.size_flags_horizontal=Control.SIZE_EXPAND_FILL;panes[0].add_child(map);map.custom_minimum_size=Vector2(0,220)
  var codes={"":"Todas las afiliaciones"}
  for system in sim.Universe.load_data().systems:
   var code=system.affiliations[str(sim.state.scenario_year)];codes[code]=sim.Universe.faction_name(code)
- var filter=UI.picker(host.content,"Afiliación",codes,host.preference("faction",""));map.faction=host.preference("faction","")
+ var filter=UI.picker(panes[1],"Afiliación",codes,host.preference("faction",""));map.faction=host.preference("faction","")
  filter.item_selected.connect(func(i):host.remember("faction",filter.get_item_metadata(i));map.faction=filter.get_item_metadata(i);map.queue_redraw())
- var detail=UI.column(host.content)
+ var detail=UI.block(panes[1],"Sistema seleccionado")
  var select=func(id):
   host.remember("system",id);UI.clear(detail)
   var p=sim.Universe.system(id)
@@ -37,7 +55,7 @@ static func draw(host):
  map.gui_input.connect(func(_event):host.remember("center",map.center);host.remember("zoom",map.zoom))
  map.selected.connect(select)
  results.item_selected.connect(func(i):var target=results.get_item_metadata(i);map.focus(target);select.call(target))
- UI.button(host.content,"Ver atlas completo",func():map.center=Vector2.ZERO;map.zoom=0.105;map.queue_redraw())
+ UI.button(panes[1],"Ver atlas completo",func():map.center=Vector2.ZERO;map.zoom=0.105;map.queue_redraw())
 static func contacts(host):
  var sim=host.sim
  var UI=host.UI

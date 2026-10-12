@@ -1,0 +1,39 @@
+[
+  {
+    "test": "routes_ui",
+    "passed": true
+  },
+  {
+    "test": "shell_ui",
+    "passed": true
+  },
+  {
+    "test": "layout_ui",
+    "passed": true
+  },
+  {
+    "test": "inbox_ui",
+    "passed": true
+  },
+  {
+    "test": "journey_ui",
+    "passed": true
+  },
+  {
+    "test": "battle_ui",
+    "passed": true
+  },
+  {
+    "test": "command_desk_ui",
+    "passed": true,
+    "sizes": [
+      "1100x740",
+      "1360x960"
+    ],
+    "visual_review": true
+  },
+  {
+    "test": "ux_hierarchy_ui",
+    "passed": true
+  }
+]

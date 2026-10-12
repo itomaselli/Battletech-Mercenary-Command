@@ -33,7 +33,7 @@ static func draw(host):
   return category=="all" or category=="decision" and e.kind=="DECISIÓN" or category=="operations" and operation or category=="archive" and e.kind=="INFORME" or category=="company" and not operation)
  var selected=str(host.preference("entry",all[0].id if not all.is_empty() else ""))
  if not all.any(func(e):return e.id==selected) and not all.is_empty():selected=all[0].id
- var panes=UI.split(host.content,host.size.x)
+ var panes=UI.workspace(host.content,host)
  var interval=UI.pager(panes[0],all.size(),maxi(0,int(all.map(func(e):return e.id).find(selected)/6)),6,func(page):host.remember("page",page);host.remember("entry",all[page*6].id);host.render())
  for item in all.slice(interval[0],interval[1]):
   var b=UI.button(panes[0],"%s · %s\n%s"%[item.kind,item.source,item.title.left(90)],func():host.remember("entry",item.id);host.render())

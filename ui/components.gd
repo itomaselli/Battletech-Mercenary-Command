@@ -68,13 +68,24 @@ static func disclosure(parent: Node,caption: String) -> VBoxContainer:
  return body
 static func pager(parent: Node,total: int,page: int,limit: int,change: Callable) -> Array:
  var pages=maxi(1,ceili(float(total)/limit));page=clampi(page,0,pages-1)
- var bar=HFlowContainer.new();bar.add_theme_constant_override("h_separation",8);parent.add_child(bar)
- var prev=button(bar,"‹ Anterior",func():change.call(page-1));prev.custom_minimum_size.x=110;prev.disabled=page==0
- text(bar,"Página %d / %d · %d entradas"%[page+1,pages,total])
- var next=button(bar,"Siguiente ›",func():change.call(page+1));next.custom_minimum_size.x=110;next.disabled=page>=pages-1
+ var bar=HBoxContainer.new();bar.add_theme_constant_override("separation",4);parent.add_child(bar)
+ var prev=button(bar,"‹",func():change.call(page-1));prev.custom_minimum_size.x=36;prev.disabled=page==0
+ text(bar,"%d / %d · %d entradas"%[page+1,pages,total])
+ var next=button(bar,"Siguiente ›",func():change.call(page+1));next.custom_minimum_size.x=122;next.disabled=page>=pages-1
  return [page*limit,mini(total,(page+1)*limit)]
 static func scroll_column(parent: Node) -> VBoxContainer:
  var scroll=ScrollContainer.new();scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL;scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
  parent.add_child(scroll)
  return column(scroll)
+
+static func workspace(parent: Node,host,left_ratio: float=1.0,right_ratio: float=1.2) -> Array:
+ var row=preload("res://ui/workspace.gd").new();row.host=host;row.add_theme_constant_override("separation",14);parent.add_child(row)
+ var left=scroll_column(row);left.get_parent().size_flags_stretch_ratio=left_ratio
+ var right=scroll_column(row);right.get_parent().size_flags_stretch_ratio=right_ratio
+ return [left,right]
+static func unit_icon(parent: Node,model: Dictionary):
+ var icon=TextureRect.new();icon.texture=ImageTexture.create_from_image(preload("res://visual/art.gd").unit_sprite(model.id))
+ icon.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST;icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+ icon.custom_minimum_size=Vector2(48,72);parent.add_child(icon)
+ return icon
