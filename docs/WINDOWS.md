@@ -27,3 +27,5 @@ Fuentes técnicas: [exportar para Windows](https://docs.godotengine.org/en/4.4/t
 Resultado v0.37.0: [compilación y prueba nativa en Windows aprobadas](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/runs/38185024270) para el commit e0d6317. La prueba fue headless; la interacción gráfica manual en Windows queda pendiente de pruebas de juego. [Descarga publicada](https://github.com/itomaselli/Battletech-Mercenary-Command/releases/tag/v0.37.0).
 
 La v0.43 añade el encuentro autónomo y su prueba de exportación. Los paquetes actuales se generan desde Actions; la release v0.37 permanece como versión anterior.
+
+[Descarga v0.43 y validación Windows aprobada](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/runs/38206504255): en Artifacts, elegir `mercenary-command-windows-x64`. El artefacto contiene el ZIP portátil del juego; extraer también ese ZIP antes de abrir el EXE.

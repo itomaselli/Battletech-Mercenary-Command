@@ -35,3 +35,5 @@ Alfa/Bravo son dos grupos fijos, no un editor de organización. La munición es 
 `export_smoke.gd`: verifica también el encuentro empaquetado y la reanudación determinista con comprobaciones activas en release.
 
 Verificación final: 47 suites de simulación y 26 de UI aprobadas antes del cierre; comprobación adicional de pago parcial para contratos originales (60% si no hay importe específico). Las reglas de peligro del capitán escalan la potencia hostil y el apoyo contratado mejora protección. Paquetes macOS y PCK Windows comprobados mediante smoke test; consultar GitHub Actions para ejecución nativa Windows.
+
+Cierre v0.43: 47/47 suites de simulación y 26/26 de interfaz aprobadas en la revisión final; smoke tests de app macOS y PCK exportado aprobados. [Exportación y ejecución nativa del EXE Windows aprobadas](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/runs/38206504255) sobre 57a13ca, con artefactos descargables. La comprobación Windows es automática/headless.
