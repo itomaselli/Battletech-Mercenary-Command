@@ -1,12 +1,17 @@
 extends VBoxContainer
+signal encounter_status(done: bool)
 const B=preload("res://sim/battle/engine.gd")
+const UI=preload("res://ui/components.gd")
 var sim
+var ui_state:Dictionary={}
 var map
 var status:Label
 var details:Label
 var reports:Label
 var feedback:Label
+var selection:Label
 var clock_button:Button
+var transmit:Button
 var group:OptionButton
 var order:OptionButton
 var attitude:OptionButton
@@ -15,58 +20,81 @@ var auto_pause:CheckBox
 var playing=false
 var accumulated=0.0
 var target=Vector2i(64,12)
+var desired_height=450.0
 const LABELS=["Avanzar","Reconocer","Defender","Presionar","Escoltar","Reserva","Retirar"]
-func label_at(parent,text:String)->Label:
- var l=Label.new();l.text=text;l.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;parent.add_child(l);return l
-func button_at(parent,text:String,callback:Callable)->Button:
- var b=Button.new();b.text=text;b.pressed.connect(callback);parent.add_child(b);return b
+func fit_height(value:float):
+ desired_height=value;custom_minimum_size.y=value
 func picker_at(parent,items:Array)->OptionButton:
- var p=OptionButton.new()
+ var p=OptionButton.new();p.fit_to_longest_item=false;p.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  for item in items:p.add_item(item)
  parent.add_child(p);return p
 func _ready():
  size_flags_horizontal=Control.SIZE_EXPAND_FILL
- label_at(self,"MAPA DE OPERACIONES · Órdenes de mando · 80 × 25")
- status=label_at(self,"")
- var bar=HFlowContainer.new();add_child(bar)
- clock_button=button_at(bar,"▶ Observar",func():playing=not playing;refresh())
- button_at(bar,"Paso · 10 s",func():playing=false;sim.battle_step();refresh())
- speed=picker_at(bar,["1×","4×","12×"])
- auto_pause=CheckBox.new();auto_pause.text="Pausa ante contacto o baja";auto_pause.button_pressed=true;bar.add_child(auto_pause)
- button_at(bar,"Delegar hasta el final",func():playing=false;feedback.text=sim.battle_delegate();refresh())
- map=preload("res://ui/battle_map.gd").new();add_child(map)
- map.sector_selected.connect(func(x,y):target=Vector2i(x,y);feedback.text="Sector %d,%d seleccionado. Elija orden y transmita."%[x,y])
- label_at(self,"Verde: fuerza propia · Rojo: contacto actual · ?: última posición conocida · Dorado: objetivo/convoy. Terreno: bosque verde, colina ocre, agua azul, edificios grises y caminos oscuros.")
- var commands=HFlowContainer.new();add_child(commands)
- group=picker_at(commands,["Alfa · primeras dos unidades","Bravo · restantes"])
+ add_theme_constant_override("separation",8)
+ status=UI.text(self,"")
+ var bar=HFlowContainer.new();bar.add_theme_constant_override("h_separation",6);add_child(bar)
+ UI.muted(bar,"RELOJ TÁCTICO")
+ clock_button=UI.button(bar,"▶ Observar",func():playing=not playing;refresh());clock_button.custom_minimum_size.x=140
+ var step=UI.button(bar,"Paso · 10 s",func():playing=false;sim.battle_step();refresh());step.custom_minimum_size.x=110
+ speed=picker_at(bar,["1×","4×","12×"]);speed.custom_minimum_size.x=65;speed.size_flags_horizontal=Control.SIZE_FILL
+ auto_pause=CheckBox.new();auto_pause.text="Pausa por alerta";auto_pause.button_pressed=true;bar.add_child(auto_pause)
+ var row=HBoxContainer.new();row.size_flags_vertical=Control.SIZE_EXPAND_FILL;row.add_theme_constant_override("separation",12);add_child(row)
+ var field=UI.column(row)
+ map=preload("res://ui/battle_map.gd").new();field.add_child(map)
+ map.sector_selected.connect(func(x,y):target=Vector2i(x,y);ui_state["x"]=x;ui_state["y"]=y;feedback.text="Sector elegido. Confirme la orden para transmitirla.";refresh())
+ var legend=UI.muted(field,"■ Propios   □ Contacto   ? Última posición   ◇ Objetivo");legend.add_theme_font_size_override("font_size",14)
+ var orders_frame=PanelContainer.new();orders_frame.custom_minimum_size.x=270;row.add_child(orders_frame)
+ var side=UI.column(orders_frame);side.add_theme_constant_override("separation",6)
+ var commands=UI.scroll_column(side);commands.custom_minimum_size.x=245;commands.add_theme_constant_override("separation",4)
+ selection=UI.text(side,"");side.move_child(selection,0)
+ group=picker_at(commands,["Alfa","Bravo"]);group.item_selected.connect(func(i):ui_state["group"]=i;refresh())
  order=picker_at(commands,LABELS)
- attitude=picker_at(commands,["Cautelosa · preservación","Equilibrada","Agresiva"]);attitude.selected=1
- button_at(commands,"Transmitir al sector seleccionado",func():feedback.text=sim.battle_order(["Alfa","Bravo"][group.selected],B.ORDERS[order.selected],B.ATTITUDES[attitude.selected],target.x,target.y);refresh())
- feedback=label_at(self,"Seleccione un sector en el mapa. Las órdenes tardan dos ticks en llegar. Observar no avanza días de campaña.")
- details=label_at(self,"")
- reports=label_at(self,"")
+ attitude=picker_at(commands,["Cautelosa","Equilibrada","Agresiva"]);attitude.selected=1
+ transmit=UI.primary(side,"Transmitir orden",func():feedback.text=sim.battle_order(["Alfa","Bravo"][group.selected],B.ORDERS[order.selected],B.ATTITUDES[attitude.selected],target.x,target.y);refresh())
+ feedback=UI.muted(commands,"Seleccione un sector en el mapa. Recepción en 20 segundos.")
+ details=UI.text(commands,"")
+ UI.button(commands,"Delegar encuentro",func():playing=false;feedback.text=sim.battle_delegate();refresh())
+ var received=PanelContainer.new();received.custom_minimum_size.y=72;add_child(received)
+ var report_body=UI.scroll_column(received)
+ reports=UI.text(report_body,"");reports.add_theme_font_size_override("font_size",14)
+ custom_minimum_size.y=desired_height
+ target=Vector2i(int(ui_state.get("x",64)),int(ui_state.get("y",12)));map.selected=target
+ group.selected=int(ui_state.get("group",0));order.selected=int(ui_state.get("order",0));attitude.selected=int(ui_state.get("attitude",1))
+ order.item_selected.connect(func(i):ui_state["order"]=i)
+ attitude.item_selected.connect(func(i):ui_state["attitude"]=i)
  refresh()
 func _process(delta):
+ var outer=get_parent().get_parent()
+ if outer is ScrollContainer:
+  var available=maxf(280,outer.size.y-position.y)
+  if absf(custom_minimum_size.y-available)>1:custom_minimum_size.y=available
  if not playing:return
  accumulated+=delta
  var delay=[0.8,0.2,0.066][speed.selected]
  if accumulated>=delay:
-  accumulated=0
-  sim.battle_step()
+  accumulated=0;sim.battle_step()
   if auto_pause.button_pressed and not sim.battle_view().get("alert","").is_empty():playing=false
   refresh()
 func refresh():
  var v=sim.battle_view()
  if v.is_empty():playing=false;return
+ encounter_status.emit(bool(v.done))
  if v.done:playing=false
- clock_button.text="Ⅱ Pausar" if playing else "▶ Observar"
- clock_button.disabled=v.done
- status.text="T+%ds · %s · Objetivo %d%% · %s %d%%\n%s"%[v.tick*10,{"escort":"Escolta","recon":"Reconocimiento","defense":"Defensa","interdiction":"Interdicción","extraction":"Extracción","recovery":"Recuperación"}[v.kind],v.progress,"Transportes hostiles" if v.kind=="interdiction" else "Elemento protegido",v.asset_hp,"Encuentro terminado: "+B.RESULT_LABELS[v.result]+". Avance el calendario para el regreso y la liquidación." if v.done else "Pausa" if not playing else "En vivo"]
+ clock_button.text="Ⅱ Pausar" if playing else "▶ Observar";clock_button.disabled=v.done
+ status.text="T+%ds · Objetivo %d%% · %s"%[v.tick*10,v.progress,"Finalizado: "+B.RESULT_LABELS[v.result]+" · regreso pendiente" if v.done else "EN VIVO" if playing else "EN PAUSA"]
  map.view=v;map.queue_redraw()
- var lines=[]
- for u in v.units:lines.append("%s · %s · %d%% · calor %d · munición %d · %s"%[u.group,u.name,u.hp,u.heat,u.ammo,"Extraído" if u.escaped else u.intent])
- for p in v.pending:lines.append("Orden en tránsito a %s · recepción T+%ds"%[p.group,p.due*10])
- details.text="\n".join(lines)
- lines=[]
- for e in v.events.slice(maxi(0,v.events.size()-6)):lines.append("T+%ds · %s"%[e.tick*10,e.text])
- reports.text="PARTES DE CAMPO\n"+"\n".join(lines)
+ var name=["Alfa","Bravo"][group.selected]
+ var units=v.units.filter(func(u):return u.group==name)
+ var pending=v.pending.filter(func(p):return p.group==name)
+ var current=v.groups[name]
+ selection.text="%s · %d unidades\nVigente: %s"%[name,units.size(),B.ORDER_LABELS[current.order]]
+ transmit.text="Encuentro finalizado" if v.done else "Orden en tránsito" if not pending.is_empty() else "Transmitir a %d,%d"%[target.x,target.y]
+ transmit.disabled=v.done or not pending.is_empty() or units.all(func(u):return u.escaped or u.hp<=0)
+ var lines=["Vigente: %s\nDestino: %d,%d · nuevo sector: %d,%d"%[B.ORDER_LABELS[current.order],current.x,current.y,target.x,target.y]]
+ for p in pending:lines.append("EN TRÁNSITO · recepción T+%ds"%(p.due*10))
+ for u in units:lines.append("%s · %d%%\nCalor %d · munición %d\n%s"%[u.name,u.hp,u.heat,u.ammo,"Extraído" if u.escaped else u.intent])
+ details.text="\n\n".join(lines)
+ lines=["INFORMES DE CAMPO · últimos acontecimientos"]
+ var latest=v.events.slice(maxi(0,v.events.size()-6));latest.reverse()
+ for e in latest:lines.append("T+%ds · %s"%[e.tick*10,e.text])
+ reports.text="\n".join(lines)

@@ -6,18 +6,24 @@ var textures:Dictionary={}
 var selected=Vector2i(64,12)
 const COLORS=[Color("173c40"),Color("427050"),Color("8b885a"),Color("345c79"),Color("797b70"),Color("465152")]
 func _ready():
- custom_minimum_size=Vector2(640,300)
+ custom_minimum_size=Vector2(200,130)
  size_flags_horizontal=Control.SIZE_EXPAND_FILL
- resized.connect(func():custom_minimum_size.y=maxf(300,size.x*600.0/1280.0))
+ size_flags_vertical=Control.SIZE_EXPAND_FILL
+ resized.connect(queue_redraw)
  mouse_filter=Control.MOUSE_FILTER_STOP
  tooltip_text="Clic: seleccionar sector para la próxima orden. No mueve unidades directamente."
 func _gui_input(e):
  if e is InputEventMouseButton and e.pressed and e.button_index==MOUSE_BUTTON_LEFT:
-  selected=Vector2i(clampi(int(e.position.x/size.x*80),0,79),clampi(int(e.position.y/size.y*25),0,24))
+  var rect=map_rect()
+  if not rect.has_point(e.position):return
+  var point=e.position-rect.position
+  selected=Vector2i(clampi(int(point.x/rect.size.x*80),0,79),clampi(int(point.y/rect.size.y*25),0,24))
   sector_selected.emit(selected.x,selected.y);queue_redraw();accept_event()
 func _draw():
  if view.is_empty():return
- var cell=Vector2(size.x/80,size.y/25)
+ var area=map_rect()
+ draw_set_transform(area.position)
+ var cell=Vector2(area.size.x/80,area.size.y/25)
  for y in range(25):
   for x in range(80):
    var tile=int(view.tiles[y*80+x]);var rect=Rect2(Vector2(x,y)*cell,cell)
@@ -43,3 +49,8 @@ func _draw():
   draw_rect(Rect2(pos,cell),Color("ed8371") if fresh else Color("986e66"),false,2)
   draw_string(ThemeDB.fallback_font,pos+Vector2(0,cell.y),"×" if c.disabled else "!" if fresh else "?",HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("ed8371"))
  draw_rect(Rect2(Vector2(selected)*cell,cell),Color.WHITE,false,1)
+
+func map_rect() -> Rect2:
+ var scale_value=minf(size.x/1280.0,size.y/600.0)
+ var dimensions=Vector2(1280,600)*scale_value
+ return Rect2((size-dimensions)/2,dimensions)

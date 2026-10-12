@@ -1,0 +1,37 @@
+[
+  {
+    "test": "routes_ui",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.28: todas las rutas integradas, render sin efectos y preparación OK\n"
+  },
+  {
+    "test": "shell_ui",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.26: estructura persistente, hangar, finanzas y navegación sin ventanas OK\n"
+  },
+  {
+    "test": "layout_ui",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.31: navegación y asistente a 1100/1360, texto grande, sin columnas colapsadas OK\n"
+  },
+  {
+    "test": "battle_ui",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nBATTLE_UI_PASS\n"
+  },
+  {
+    "test": "ux_hierarchy_ui",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nBattle layout (1100, 740) outer 502.0 / 502.0 map (606.0, 236.0)\nBattle layout (1360, 960) outer 722.0 / 722.0 map (866.0, 456.0)\nUX_HIERARCHY_PASS\n"
+  },
+  {
+    "test": "inbox_ui",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.27: bandeja causal, expedientes, selección estable y render sin efectos OK\n"
+  },
+  {
+    "test": "journey_ui",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.31: carrera → aceptar → preparar → desplegar → informe, confirmación cancelable OK\n"
+  }
+]

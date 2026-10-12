@@ -1,4 +1,4 @@
-# Windows x64 — v0.43.0
+# Windows x64 — v0.44.0
 
 Extraer el ZIP completo y abrir MercenaryCommand.exe. MercenaryCommand.pck debe permanecer al lado del EXE. No requiere Godot, Python ni conexión. El ejecutable es portátil, de 64 bits, con renderizador Compatibility y sin firma digital.
 

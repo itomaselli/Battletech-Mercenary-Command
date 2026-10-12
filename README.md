@@ -1,6 +1,14 @@
-# BattleTech Mercenary Command — v0.43.0
+# BattleTech Mercenary Command — v0.44.0
 
 Juego personal independiente de MekHQ, en Godot 4/GDScript. Diriges una compañía desde una terminal de mando: contratas personal, preparas fuerzas, aceptas compromisos, das órdenes y recibes informes. La simulación propia conserva el estado y las consecuencias. No requiere conexión, claves ni assets descargados.
+
+## Organización de pantallas — v0.44
+
+Operaciones se organiza en **Resumen → Contratos → Plan → Batalla → Informe**, con Encargos separado. Batalla mantiene el mapa, las órdenes laterales y los partes en áreas independientes. El botón de transmitir siempre muestra el sector de destino; grupo seleccionado, orden vigente y orden en tránsito se distinguen. El calendario de campaña queda desactivado mientras se observa un encuentro pendiente: vuelva a Resumen para avanzar días y delegarlo.
+
+Personal, Hangar y Contratos tienen listas paginadas y un expediente identificado. Detalles, historial, negociación y acciones secundarias se despliegan a demanda. La bandeja filtra decisiones, operaciones, compañía y archivo; la crónica muestra primero lo reciente y se pagina. Encabezados, paneles, selección y acciones principales comparten estilos low-res.
+
+[Plan y comprobaciones UX](docs/UX-v044.md). No se modificó el formato de las partidas.
 
 ## Operaciones en mapa — v0.38–v0.43
 
@@ -14,7 +22,7 @@ Observar no avanza días administrativos. **Delegar** ejecuta el mismo motor, y 
 
 ## Windows y GitHub
 
-La **v0.43** se obtiene como artefacto ZIP de una ejecución aprobada de [Windows build and smoke test](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/workflows/windows.yml). La [release publicada v0.37.0](https://github.com/itomaselli/Battletech-Mercenary-Command/releases/tag/v0.37.0) es anterior al mapa de operaciones. La versión Windows es un ZIP portátil x64: extraé todo y abrí **MercenaryCommand.exe**, conservando el archivo PCK a su lado. El código está en [Battletech-Mercenary-Command](https://github.com/itomaselli/Battletech-Mercenary-Command). El flujo de GitHub Actions genera y prueba el ejecutable en Windows; sus ejecuciones aprobadas ofrecen el ZIP como artefacto.
+La **v0.44** se obtiene como artefacto ZIP de una ejecución aprobada de [Windows build and smoke test](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/workflows/windows.yml). La [release publicada v0.37.0](https://github.com/itomaselli/Battletech-Mercenary-Command/releases/tag/v0.37.0) es anterior al mapa de operaciones. La versión Windows es un ZIP portátil x64: extraé todo y abrí **MercenaryCommand.exe**, conservando el archivo PCK a su lado. El código está en [Battletech-Mercenary-Command](https://github.com/itomaselli/Battletech-Mercenary-Command). El flujo de GitHub Actions genera y prueba el ejecutable en Windows; sus ejecuciones aprobadas ofrecen el ZIP como artefacto.
 
 [Instalación, traslado de partidas y exportación reproducible](docs/WINDOWS.md). El código del proyecto conserva la licencia GPL-3.0 del repositorio; los datos y componentes de terceros mantienen las atribuciones y licencias indicadas en data/README.md y GODOT-LICENSE.txt.
 

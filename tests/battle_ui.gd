@@ -8,14 +8,12 @@ func run():
  for dimensions in [Vector2i(1100,740),Vector2i(1360,960)]:
   root.size=dimensions;root.content_scale_size=dimensions
   h.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-  h.navigate("Operaciones","En curso");await settle()
+  h.navigate("Operaciones","Batalla");await settle()
   var panel=h.content.get_children().filter(func(n):return n.get_script()==load("res://ui/battle_panel.gd"))[0]
-  assert(panel.map.size.x>=640 and panel.map.size.y>=300)
+  assert(panel.map.size.x>=200 and panel.map.size.y>=130)
   assert(h.scroll.get_h_scroll_bar().max_value<=h.scroll.size.x+1,"Map horizontal overflow")
   panel.group.selected=1;panel.order.selected=5
-  var buttons=panel.find_children("*","Button",true,false)
-  for b in buttons:
-   if b.text=="Transmitir al sector seleccionado":b.pressed.emit()
+  panel.transmit.pressed.emit()
   assert(h.sim.state.military.current.battle.pending.size()==1)
   h.sim.battle_step();h.sim.battle_step();assert(h.sim.state.military.current.battle.groups.Bravo.order=="reserve")
   panel.clock_button.pressed.emit();assert(panel.playing)
@@ -31,5 +29,5 @@ func run():
  print("BATTLE_UI_PASS")
  quit()
 func panel_check(h):
- h.navigate("Operaciones","En curso")
+ h.navigate("Operaciones","Batalla")
  assert(h.content.get_children().filter(func(n):return n.get_script()==load("res://ui/battle_panel.gd"))[0].clock_button.disabled)

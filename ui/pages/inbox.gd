@@ -13,22 +13,36 @@ static func entries(sim) -> Array:
  if not sim.state.rpg.director.pending.is_empty():items.append({"id":"invitation","title":"Invitación del equipo","kind":"OPCIONAL","source":"Compañía","body":sim.state.rpg.director.pending.text,"rpg":"Memoria"})
  for m in sim.state.mechs:
   if m.hp<90 or sim.state.rpg.workshop.faults.has(str(m.uid)):items.append({"id":"unit:"+str(m.uid),"title":m.name+" requiere atención","kind":"AVISO","source":"Taller","body":"Integridad %d%%. Revise costes y alternativas antes de comprometerla."%m.hp,"uid":m.uid})
- for i in range(sim.state.chronicle.size()-1,maxi(-1,sim.state.chronicle.size()-9),-1):
-  var e=sim.state.chronicle[i];items.append({"id":"log:"+str(i),"title":e.kind+" · "+e.date,"kind":"INFORME","source":e.kind,"body":e.text})
- return items
+ for i in range(sim.state.chronicle.size()-1,maxi(-1,sim.state.chronicle.size()-201),-1):
+  var e=sim.state.chronicle[i];items.append({"id":"log:"+str(i),"title":e.kind+" · "+e.date,"kind":"INFORME","source":e.kind,"body":e.text,"when":e.date})
+ for item in items:
+  if not item.has("when"):item["when"]="Estado actual · "+sim.date_text()
+ var prioritized=[]
+ for kind in ["DECISIÓN","PAUSA","AVISO","OPCIONAL","INFORME"]:
+  prioritized.append_array(items.filter(func(item):return item.kind==kind))
+ return prioritized
 static func draw(host):
  var UI=host.UI
- var all=entries(host.sim)
+ var records=entries(host.sim)
+ var categories={"all":"Todo","decision":"Requiere decisión","operations":"Operaciones","company":"Compañía","archive":"Archivo"}
+ var filters=UI.picker(host.content,"Mostrar comunicaciones",categories,host.preference("filter","all"))
+ filters.item_selected.connect(func(i):host.remember("filter",filters.get_item_metadata(i));host.remember("page",0);host.remember("entry","");host.render())
+ var category=str(host.preference("filter","all"))
+ var all=records.filter(func(e):
+  var operation=e.id=="military" or e.source in ["Parte operacional","Resultado","Radio","Orden","Orden de despliegue"]
+  return category=="all" or category=="decision" and e.kind=="DECISIÓN" or category=="operations" and operation or category=="archive" and e.kind=="INFORME" or category=="company" and not operation)
  var selected=str(host.preference("entry",all[0].id if not all.is_empty() else ""))
  if not all.any(func(e):return e.id==selected) and not all.is_empty():selected=all[0].id
  var panes=UI.split(host.content,host.size.x)
- for item in all:
-  var b=UI.button(panes[0],"%s · %s"%[item.kind,item.title],func():host.remember("entry",item.id);host.render())
+ var interval=UI.pager(panes[0],all.size(),maxi(0,int(all.map(func(e):return e.id).find(selected)/6)),6,func(page):host.remember("page",page);host.remember("entry",all[page*6].id);host.render())
+ for item in all.slice(interval[0],interval[1]):
+  var b=UI.button(panes[0],"%s · %s\n%s"%[item.kind,item.source,item.title.left(90)],func():host.remember("entry",item.id);host.render())
   b.toggle_mode=true;b.button_pressed=item.id==selected
  var found=all.filter(func(e):return e.id==selected)
  if found.is_empty():UI.text(panes[1],"Sin informes pendientes.");return
  var e=found[0]
- UI.text(panes[1],e.source,true);UI.text(panes[1],e.body)
+ panes[1]=UI.block(panes[1],e.kind+" · "+e.source,e.when+"\n"+e.title)
+ UI.text(panes[1],e.body)
  if e.has("local"):
   for spec in [["Aceptar intercambio","accept"],["Dejar pasar · sin penalidad","decline"]]:host.action(panes[1],spec[0],func():return host.sim.rpg_command("story_local",{"action":spec[1]}))
  elif e.has("personal"):

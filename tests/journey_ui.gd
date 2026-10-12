@@ -10,9 +10,9 @@ func run():
  var h=load("res://ui/main.tscn").instantiate();h.testing=true;h.library.directory="user://test-journey-"+str(Time.get_ticks_usec());root.add_child(h);await settle()
  h.wizard=load("res://ui/pages/new_career.gd").new();h.wizard.seed_value=86;h.wizard.regenerate();h.finish_career();await settle()
  h.navigate("Operaciones","Contratos");await settle()
- button(h,"Aceptar condiciones").pressed.emit();await settle();assert(h.section=="Preparación")
+ button(h,"Aceptar condiciones").pressed.emit();await settle();assert(h.section=="Plan")
  for check in h.content.find_children("*","CheckBox",true,false):check.button_pressed=true
- button(h,"Autorizar despliegue").pressed.emit();await settle();assert(not h.sim.state.active.is_empty() and h.section=="En curso")
+ button(h,"Autorizar despliegue").pressed.emit();await settle();assert(not h.sim.state.active.is_empty() and h.section=="Batalla")
  for i in range(5):
   if h.sim.state.active.is_empty():break
   h.advance_days(1);await settle()
