@@ -1,5 +1,10 @@
 [
   {
+    "test": "battle_ui.gd",
+    "passed": true,
+    "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nBATTLE_UI_PASS\n"
+  },
+  {
     "test": "career_wizard_ui.gd",
     "passed": true,
     "output": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nv0.30: asistente reversible, confirmación única y carreras separadas OK\n"

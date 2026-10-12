@@ -1,5 +1,6 @@
 extends RefCounted
 ## Operational facts and commander-visible reports are deliberately separate.
+const Battle = preload("res://sim/battle/engine.gd")
 const APPROACHES = ["direct", "recon"]
 const AUTHORITIES = ["delegate", "consult"]
 const PRIORITIES = ["objective", "preserve"]
@@ -74,6 +75,13 @@ static func valid(data: Variant, day: int, active: Dictionary) -> bool:
 	if not data.get("current") is Dictionary or not data.get("archive") is Array or data.archive.size() > 30: return false
 	var c = data.current
 	if not c.is_empty():
+		if c.has("battle") and (not Battle.valid(c.battle) or not c.get("battle_reported") is bool): return false
+		if c.has("battle"):
+			if active.is_empty(): return false
+			var own = c.battle.units.filter(func(u): return u.side == "own")
+			if own.size() != active.team.size(): return false
+			for u in own:
+				if not c.get("team",[]).any(func(m): return m.get("uid") == u.id and m.get("hp") == u.initial_hp): return false
 		if active.is_empty() or not integer(c.get("id"), 1, data.sequence) or not integer(c.get("started"), 0, day): return false
 		if c.id != data.sequence or not integer(c.get("elapsed"), 0, day - c.started): return false
 		if not c.get("phase") in ["Salida", "Aproximación", "Reconocimiento", "Contacto", "Ejecución"]: return false

@@ -33,5 +33,18 @@ func run():
   h.navigate(destination[0],destination[1])
   for i in range(3):await process_frame
   check(h.content.get_child_count()>0,"Page "+destination[1])
+ var combat=C.new(430)
+ combat.accept_contract(0);combat.dispatch_battle([0,1,2,3],1)
+ combat.battle_order("Bravo","reserve","careful",5,12)
+ combat.battle_step();combat.battle_step()
+ check(combat.save_game(path)==OK,"Battle save")
+ check(copy.load_game(path)==OK and copy.state==combat.state,"Battle reload")
+ DirAccess.remove_absolute(path)
+ h.sim=combat;h.navigate("Operaciones","En curso")
+ for i in range(5):await process_frame
+ check(not h.sim.battle_view().is_empty(),"Battle map bundled")
+ combat.battle_delegate();copy.battle_delegate()
+ check(combat.state==copy.state,"Battle deterministic continuation")
+ check(combat.state.military.current.battle.done,"Battle completes")
  print("EXPORT_SMOKE_PASS" if not failed else "EXPORT_SMOKE_FAIL")
  quit(1 if failed else 0)

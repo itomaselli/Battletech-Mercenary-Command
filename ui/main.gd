@@ -43,7 +43,7 @@ func _ready():
  for side in ["left","right","top","bottom"]:margin.add_theme_constant_override("margin_"+side,14)
  add_child(margin)
  var root=UI.column(margin)
- title=UI.text(root,"MERCENARY COMMAND · v0.37",true)
+ title=UI.text(root,"MERCENARY COMMAND · v0.43",true)
  stats=UI.text(root,"")
  var top=HFlowContainer.new();root.add_child(top)
  UI.button(top,"← Volver",back)

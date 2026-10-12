@@ -1,0 +1,25 @@
+extends SceneTree
+const B=preload("res://sim/battle/engine.gd")
+func _initialize():
+ var roster=[]
+ for i in range(4):roster.append({"uid":i,"name":"Unidad %d"%i,"group":"Alfa" if i<2 else "Bravo","speed":5,"fire":6})
+ for kind in B.KINDS:
+  var b=B.create(42,roster,kind,"urbano",8)
+  assert(B.valid(b))
+  var copy=b.duplicate(true)
+  for i in range(10):B.tick(b)
+  assert(B.valid(b))
+  var view=B.public_view(b)
+  assert(not view.has("seed") and view.units.all(func(u):return u.side=="own"))
+  for c in view.contacts:assert(not c.has("hp") and not c.has("fire"))
+  B.run(b);B.run(copy)
+  assert(b==copy and b.done and b.tick<=B.LIMIT)
+  print(kind,": ",b.result," ",b.progress,"%")
+ var b=B.create(81,roster,"escort","llanura",8)
+ assert(B.issue(b,"Alfa","reserve","careful",5,12)=="Orden transmitida.")
+ B.tick(b);assert(b.groups.Alfa.order=="escort")
+ B.tick(b);assert(b.groups.Alfa.order=="reserve")
+ assert(B.issue(b,"Alfa","advance","balanced",80,12)=="Orden inválida.")
+ var broken=b.duplicate(true);broken.units[0].erase("ammo");assert(not B.valid(broken))
+ print("BATTLE_ENGINE_PASS")
+ quit()

@@ -7,6 +7,8 @@ static func draw(host):
   host.rpg_adapter.delegation_form()
   host.rpg_sections(host.content,"Oficiales",func(e):return not e.title.begins_with("Delegar a "))
   return
+ if host.section=="En curso" and not sim.battle_view().is_empty():
+  var panel=preload("res://ui/battle_panel.gd").new();panel.sim=sim;host.content.add_child(panel);return
  if host.section=="En curso":host.operations_adapter.content=UI.column(host.content);host.operations_adapter.rebuild();return
  if host.section=="Preparación":prepare(host);return
  var contracts=sim.state.offers+sim.state.missions.offers
@@ -72,12 +74,13 @@ static func prepare(host):
   if p.role in ["Piloto","Dotación"]:leaders[p.id]=p.name
  var leader=UI.picker(host.content,"Jefe de operación",leaders,host.leader_id)
  leader.item_selected.connect(func(i):host.leader_id=int(leader.get_item_metadata(i)))
- host.operations_adapter.content=UI.column(host.content);host.operations_adapter.rebuild()
+ UI.text(host.content,"El cumplimiento parcial paga el importe parcial del contrato o, si no tiene uno específico, el 60% del total; el anticipo se descuenta al liquidar.")
+ UI.text(host.content,"Mapa de mando: Alfa agrupa las primeras dos unidades seleccionadas y Bravo las restantes. Puede pausar al inicio para enviar planes por sector, dejar reservas o delegar. La doctrina fija la actitud inicial; cautelosa permite retiradas autónomas por daños según los valores del piloto.")
  UI.button(host.content,"Autorizar despliegue →",func():
   var team=[]
   for uid in host.selected:
    var index=sim.mech_index(uid)
    if index>=0:team.append(index)
-  host.report(sim.dispatch(0,team,host.doctrine,host.leader_id))
+  host.report(sim.dispatch_battle(team,host.doctrine,host.leader_id))
   if not sim.state.active.is_empty():host.navigate("Operaciones","En curso"))
  UI.button(host.content,"Retirarse / cancelar…",func():host.cancel_contract())

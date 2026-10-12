@@ -8,6 +8,7 @@ const Travel = preload("res://sim/travel.gd")
 const Missions = preload("res://sim/missions.gd")
 const Universe = preload("res://sim/universe.gd")
 const Lore = preload("res://sim/lore.gd")
+const Battle = preload("res://sim/battle/engine.gd")
 const Operations = preload("res://sim/operations.gd")
 const World = preload("res://sim/world.gd")
 const MAX_HANGAR = 8
@@ -209,7 +210,7 @@ func advance(days: int = 1):
 			var progress = _operation_tick()
 			if progress and not state.active.is_empty() and RPG.operation_tick(self): progress = false
 			if progress and not state.active.is_empty():
-				if state.active.has("objective"):
+				if state.active.has("objective") and not state.military.current.has("battle"):
 					Missions.tick(state.active.objective,state.active.contract,int(state.missions.seed),state.military.current.orders.priority == "preserve")
 					_operation_report(Missions.report(state.active.objective))
 				state.active.remaining -= 1
@@ -237,6 +238,10 @@ func advance(days: int = 1):
 
 func _resolve():
 	var op = state.active
+	var battle = state.military.current.get("battle", {})
+	if not battle.is_empty():
+		Battle.run(battle)
+		_battle_report()
 	var power = 0.0
 	for i in op.team:
 		power += pilot_for(i).skill * state.mechs[i].hp / 100.0 * (1.0 - pilot_for(i).fatigue / 200.0)
@@ -246,11 +251,18 @@ func _resolve():
 	var roll = rng.randi_range(1, 6) + rng.randi_range(1, 6)
 	var success = power + roll + op.doctrine + (state.morale - 50) / 20.0 >= op.contract.difficulty + 10
 	var result = "success" if success else "failure"
+	if not battle.is_empty():
+		result = battle.result
+		success = result == "success"
 	if op.has("objective"):
-		result = Missions.outcome(op.objective)
+		if not battle.is_empty():
+			op.objective.progress = battle.progress
+			op.objective.integrity = battle.asset_hp
+			op.objective.elapsed = maxi(1,int(battle.tick))
+		result = battle.result if not battle.is_empty() else Missions.outcome(op.objective)
 		success = result == "success"
 		Missions.finish(state,op.contract,op.objective,result)
-	var total_pay = int(op.contract.partial_pay if result == "partial" else op.contract.pay if success else op.contract.failure_pay)
+	var total_pay = int(op.contract.get("partial_pay",int(op.contract.pay*0.6)) if result == "partial" else op.contract.pay if success else op.contract.failure_pay)
 	var payment = total_pay - int(op.contract.advance)
 	_settle_contract(payment)
 	_close_opportunity(op.contract, success)
@@ -263,11 +275,15 @@ func _resolve():
 		if not state.military.current.is_empty(): damage = maxi(0, damage + int(state.military.current.private.damage))
 		damage = int(damage * int(op.get("rpg_danger",100)) / 100.0)
 		if op.get("rpg_support",false): damage = maxi(0,damage-2)
+		if not battle.is_empty():
+			for u in battle.units:
+				if u.side == "own" and u.id == state.mechs[i].uid: damage = maxi(0,int(state.mechs[i].hp)-int(u.hp))
 		state.mechs[i].hp = maxi(0, int(state.mechs[i].hp) - damage)
 		if state.mechs[i].hp < 40:
 			pilot_for(i).injury = rng.randi_range(5, 15)
 			log_event("Bajas", "%s evacúa su máquina; recuperación estimada: %d días. Unidad recuperada por remolque." % [pilot_for(i).name, pilot_for(i).injury])
 	log_event("Resultado", "%s: %s. Liquidación final: %+d C-bills (anticipo descontado). %s" % [op.contract.name, "cumplimiento parcial" if result == "partial" else "objetivo cumplido" if success else "retirada sin cumplir objetivo", payment, "El empleador recomienda a la compañía." if success else "El empleador cuestiona nuestra capacidad; cayó la moral."])
+	if not battle.is_empty(): _battle_memories(battle)
 	_award_operation(op, success)
 	_operation_story(op)
 	Story.operation(self,result)
@@ -795,7 +811,21 @@ func cancel_contract(reason: String = "Retirada ordenada por el capitán") -> St
 		state.rpg.jobs = state.rpg.jobs.filter(func(j):return not j.kind in ["transport","investigate","organize"])
 	if state.active.has("objective"): Missions.finish(state,contract,state.active.objective,"failure")
 	if not state.military.current.is_empty():
-		if state.military.current.encountered:
+		if state.military.current.has("battle"):
+			var b = state.military.current.battle
+			for group in ["Alfa","Bravo"]:
+				b.groups[group] = {"order":"withdraw","attitude":"careful","x":0,"y":12}
+			b.pending = []
+			Battle.run(b)
+			_battle_report()
+			for u in b.units:
+				if u.side == "own":
+					var index = mech_index(u.id)
+					if index >= 0:
+						state.mechs[index].hp = u.hp
+						if u.hp < 40: pilot_for(index).injury = maxi(int(pilot_for(index).injury),5)
+			_battle_memories(b)
+		elif state.military.current.encountered:
 			for index in state.active.team: state.mechs[index].hp = maxi(0, int(state.mechs[index].hp) - 3)
 		Story.operation(self,"cancelled")
 		_finish_operation("Retirada ordenada; contrato incumplido")
@@ -1668,6 +1698,10 @@ func send_operation_order(authority: String, priority: String) -> String:
 func _operation_tick() -> bool:
 	var c = state.military.current
 	if c.is_empty(): return true # Preserve old in-flight operations exactly.
+	if c.has("battle"):
+		c.elapsed += 1
+		c.phase = "Ejecución"
+		return true
 	c.elapsed += 1
 	if not c.pending_order.is_empty() and state.day >= c.pending_order.due:
 		c.orders = c.pending_order.orders.duplicate(true)
@@ -1884,3 +1918,59 @@ func local_services() -> bool:
 
 func rpg_command(action: String, args: Dictionary = {}) -> String:
 	return RPG.command(self,action,args)
+
+# Map encounters opt in at deployment; legacy API/save operations remain unchanged.
+func dispatch_battle(team: Array, doctrine: int, leader: int = -1) -> String:
+	if not state.active.is_empty():return "Ya hay una operación en curso."
+	var message = dispatch(0,team,doctrine,leader)
+	if state.active.is_empty() or state.military.current.has("battle"):return message
+	var roster=[]
+	for n in range(state.active.team.size()):
+		var i=int(state.active.team[n]);var m=state.mechs[i];var p=pilot_for(i);var profile=unit_profile(i)
+		roster.append({"uid":m.uid,"name":m.name,"hp":int(m.hp),"model":m.model_id,"group":"Alfa" if n<2 else "Bravo",
+			"fire":int(profile.firepower),"speed":int(profile.mobility),"sensor":int(profile.recon),"armor":int(profile.protection)+(4 if state.active.get("rpg_support",false) else 0),
+			"pilot":int(p.id),"value":state.story.people.profiles.get(str(p.id),{}).get("value","duty"),"skill":int(p.skill),"fatigue":int(p.fatigue),"vehicle":MECH_CATALOG[int(m.model)].kind=="vehicle"})
+	var c=state.military.current
+	c["battle"]=Battle.create(int(state.military.seed)+int(c.id)*7919,roster,state.active.contract.get("mission_type", "recon" if state.active.contract.name.contains("Patrulla") else "recovery" if state.active.contract.name.contains("depósito") else "escort"),state.active.contract.get("terrain","llanura"),int(state.active.contract.difficulty),["careful","balanced","aggressive"][doctrine],int(state.active.get("rpg_danger",100)))
+	c["battle_reported"]=false
+	return "Despliegue autorizado. Abra el mapa o delegue el encuentro y avance el calendario para el regreso."
+
+func battle_view() -> Dictionary:
+	return Battle.public_view(state.military.current.get("battle",{}))
+
+func battle_order(group: String, order: String, attitude: String, x: int, y: int) -> String:
+	if state.ended or not state.military.current.has("battle"):return "No hay encuentro activo."
+	return Battle.issue(state.military.current.battle,group,order,attitude,x,y)
+
+func battle_step(steps: int = 1) -> void:
+	if state.ended or not state.military.current.has("battle"):return
+	var b=state.military.current.battle
+	for i in range(clampi(steps,1,240)):
+		Battle.tick(b)
+		if b.done or not b.alert.is_empty():break
+	if b.done:_battle_report()
+
+func battle_delegate() -> String:
+	if not state.military.current.has("battle"):return "No hay encuentro activo."
+	Battle.run(state.military.current.battle)
+	_battle_report()
+	return "Encuentro resuelto según sus órdenes. Avance el calendario para el regreso y la liquidación."
+
+func _battle_report():
+	var c=state.military.current
+	if not c.has("battle") or c.get("battle_reported",false):return
+	c.battle_reported=true
+	# Only commander-visible events enter the chronicle, linked to the operation.
+	var events=c.battle.events
+	for e in events.slice(maxi(0,events.size()-12)):
+		_operation_report("T+%ds · %s"%[int(e.tick)*10,e.text])
+	_operation_report("Balance de campo: %s; objetivo %d%%. Daños reales pendientes de registro al regreso."%[Battle.RESULT_LABELS[c.battle.result],c.battle.progress])
+
+func _battle_memories(b: Dictionary):
+	for u in b.units:
+		if u.side != "own" or u.get("pilot",-1) < 0: continue
+		var text = "Participó en el encuentro; el plan consiguió %d%% del objetivo." % b.progress
+		if u.hp <= 0: text = "Su unidad quedó inmovilizada durante el encuentro y fue recuperada; necesita atención médica."
+		elif u.escaped: text = "Alcanzó la extracción conforme a las órdenes de retirada; conserva el recuerdo del repliegue."
+		elif u.hp < u.initial_hp: text = "Regresó del encuentro con %d puntos de daño en su unidad." % (u.initial_hp-u.hp)
+		Story.People.remember(self,int(u.pilot),text)
