@@ -29,3 +29,5 @@ Resultado v0.37.0: [compilación y prueba nativa en Windows aprobadas](https://g
 La v0.43 añade el encuentro autónomo y su prueba de exportación. Los paquetes actuales se generan desde Actions; la release v0.37 permanece como versión anterior.
 
 [Descarga v0.43 y validación Windows aprobada](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/runs/38206504255): en Artifacts, elegir `mercenary-command-windows-x64`. El artefacto contiene el ZIP portátil del juego; extraer también ese ZIP antes de abrir el EXE.
+
+[Descarga actual v0.44 y prueba Windows aprobada](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/runs/38276734414). Incluye la reorganización de UI; los enlaces v0.43 y v0.37 anteriores se conservan como historial.
