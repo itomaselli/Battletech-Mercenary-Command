@@ -23,3 +23,5 @@ La exportación comprueba la versión del motor, el formato PE AMD64 y la presen
 `.github/workflows/windows.yml` exporta y ejecuta la prueba sobre Windows en GitHub Actions; verifica SHA512 de las descargas oficiales antes de usarlas y publica el ZIP como artefacto solo si la prueba pasa. Puede ejecutarse manualmente desde Actions y se dispara al cambiar código en main.
 
 Fuentes técnicas: [exportar para Windows](https://docs.godotengine.org/en/4.4/tutorials/export/exporting_for_windows.html) y [exportación de proyectos](https://docs.godotengine.org/en/4.4/tutorials/export/exporting_projects.html).
+
+Resultado v0.37.0: [compilación y prueba nativa en Windows aprobadas](https://github.com/itomaselli/Battletech-Mercenary-Command/actions/runs/38185024270) para el commit e0d6317. La prueba fue headless; la interacción gráfica manual en Windows queda pendiente de pruebas de juego. [Descarga publicada](https://github.com/itomaselli/Battletech-Mercenary-Command/releases/tag/v0.37.0).

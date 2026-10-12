@@ -4,7 +4,7 @@ Juego personal independiente de MekHQ, en Godot 4/GDScript. Diriges una compañ�
 
 ## Windows y GitHub
 
-La versión Windows es un ZIP portátil x64: extraé todo y abrí **MercenaryCommand.exe**, conservando el archivo PCK a su lado. El código está en [Battletech-Mercenary-Command](https://github.com/itomaselli/Battletech-Mercenary-Command). El flujo de GitHub Actions genera y prueba el ejecutable en Windows; sus ejecuciones aprobadas ofrecen el ZIP como artefacto.
+[Descargar Windows x64 v0.37.0](https://github.com/itomaselli/Battletech-Mercenary-Command/releases/tag/v0.37.0). La versión Windows es un ZIP portátil x64: extraé todo y abrí **MercenaryCommand.exe**, conservando el archivo PCK a su lado. El código está en [Battletech-Mercenary-Command](https://github.com/itomaselli/Battletech-Mercenary-Command). El flujo de GitHub Actions genera y prueba el ejecutable en Windows; sus ejecuciones aprobadas ofrecen el ZIP como artefacto.
 
 [Instalación, traslado de partidas y exportación reproducible](docs/WINDOWS.md). El código del proyecto conserva la licencia GPL-3.0 del repositorio; los datos y componentes de terceros mantienen las atribuciones y licencias indicadas en data/README.md y GODOT-LICENSE.txt.
 
