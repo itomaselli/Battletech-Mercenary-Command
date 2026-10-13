@@ -2,14 +2,14 @@ config_version=5
 
 [application]
 config/name="BattleTech • Mercenary Command"
-config/version="0.45.0"
+config/version="0.46.0"
 run/main_scene="res://ui/main.tscn"
 
 [display]
-window/size/viewport_width=1360
-window/size/viewport_height=960
-window/size/window_width_override=1224
-window/size/window_height_override=864
+window/size/viewport_width=1672
+window/size/viewport_height=940
+window/size/window_width_override=1440
+window/size/window_height_override=810
 window/stretch/mode="canvas_items"
 
 [rendering]

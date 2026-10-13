@@ -24,7 +24,7 @@ var rng = RandomNumberGenerator.new()
 
 func _init(campaign_seed: int = 3027, scenario_year: int = 3027, initial: Dictionary = {}):
 	rng.seed = campaign_seed
-	state = {"version": VERSION, "scenario_year": 3060 if scenario_year == 3060 else 3027, "company_name": DEFAULT_COMPANY, "captain_name": DEFAULT_CAPTAIN, "day": 0, "funds": 240000, "supplies": 90,
+	state = {"version": VERSION, "scenario_year": 3060 if scenario_year == 3060 else 3027, "company_name": DEFAULT_COMPANY, "emblem_id": 0, "captain_name": DEFAULT_CAPTAIN, "day": 0, "funds": 240000, "supplies": 90,
 		"reputation": 0, "morale": 70, "arrears": 0, "ended": false,
 		"mechs": [], "staff": [], "offers": [], "active": {}, "chronicle": []}
 	var models = ["Locust LCT-1V", "Shadow Hawk SHD-2H", "Centurion CN9-A", "Vindicator VND-1R"]
@@ -443,6 +443,7 @@ func load_game(path: String = "user://campaign.json") -> Error:
 		parsed.version = 25
 	if parsed is Dictionary and parsed.get("rpg") is Dictionary: RPG.upgrade(parsed.rpg)
 	if parsed is Dictionary and parsed.get("story") is Dictionary: Story.upgrade(parsed.story)
+	if parsed is Dictionary and not parsed.has("emblem_id"): parsed.emblem_id=0
 	if not _catalog_ids(parsed, false): return ERR_INVALID_DATA
 	if not _valid_save(parsed): return ERR_INVALID_DATA
 	state = _normalize_numbers(parsed)
@@ -454,6 +455,7 @@ func load_game(path: String = "user://campaign.json") -> Error:
 
 func _valid_save(value: Variant) -> bool:
 	if not value is Dictionary: return false
+	if not (value.get("emblem_id") is int or value.get("emblem_id") is float) or value.emblem_id!=int(value.emblem_id) or value.emblem_id<0 or value.emblem_id>=50: return false
 	if not _valid_name(value.get("company_name")) or not _valid_name(value.get("captain_name")): return false
 	for key in state.keys():
 		if not value.has(key): return false

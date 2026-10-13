@@ -7,6 +7,7 @@ var year=3027
 var unit_roll=0
 var people_roll=0
 var company="Compañía independiente"
+var emblem_id=0
 var captain="Comandante"
 var origin=""
 var specialty=""
@@ -24,6 +25,7 @@ func _init():
 func regenerate():draft=Start.generate(seed_value,year,unit_roll,people_roll)
 func build():
  var sim=Campaign.new(seed_value,year,draft)
+ sim.state.emblem_id=emblem_id
  if not sim.set_identity(company,captain):return null
  sim.rpg_command("configure",{"origin":origin,"specialty":specialty,"motivation":motivation,"bond":bond})
  sim.rpg_command("arcs",{"action":"settings","economy":economy,"danger":danger,"frequency":frequency})
@@ -42,6 +44,7 @@ func draw(host):
    option.item_selected.connect(func(i):set(spec[2],option.get_item_metadata(i)))
   field(parent,"Compañía",company,func(v):company=v)
   field(parent,"Capitán",captain,func(v):captain=v)
+  preload("res://visual/emblems.gd").selector(host,UI.disclosure(parent,"Elegir emblema"),emblem_id,func(i):emblem_id=i;host.render())
   var seed_input=field(parent,"Semilla",str(seed_value),func(_v):pass)
   UI.button(parent,"Aplicar semilla",func():
    if seed_input.text.is_valid_int() and abs(int(seed_input.text))<=2147483647:
@@ -89,8 +92,9 @@ func field(parent,caption: String,value: String,callback: Callable) -> LineEdit:
 
 func controls(host,parent):
  var UI=host.UI
- var bar=HFlowContainer.new();parent.add_child(bar)
- UI.button(bar,"Cancelar",func():host.wizard=null;host.render())
- if step>0:UI.button(bar,"← Atrás",func():step-=1;host.render())
- if step<3:UI.button(bar,"Siguiente →",func():step+=1;host.render())
- else:UI.button(bar,"Iniciar carrera",func():host.finish_career())
+ var bar=HBoxContainer.new();parent.add_child(bar)
+ for i in range(4):
+  var b=UI.button(bar,"%d · %s"%[i+1,["Identidad","Capitán","Equipo","Revisión"][i]],func():step=i;host.render());b.toggle_mode=true;b.button_pressed=step==i
+ UI.button(parent,"Cancelar creación",func():host.wizard=null;host.render())
+ if step<3:host.set_task("Siguiente →",func():step+=1;host.render())
+ else:host.set_task("Iniciar carrera",func():host.finish_career())

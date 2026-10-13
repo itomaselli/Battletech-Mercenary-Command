@@ -11,7 +11,7 @@ static func draw(host):
  if host.section=="Informe":debrief(host);return
  if host.section=="Batalla" and not sim.battle_view().is_empty():
   if host.preference("battle_controls")==null:host.remember("battle_controls",{})
-  var panel=preload("res://ui/battle_panel.gd").new();panel.sim=sim;panel.ui_state=host.preference("battle_controls")
+  var panel=preload("res://ui/battle_panel.gd").new();panel.command_parent=host.contextual("ÓRDENES DE CAMPO");panel.sim=sim;panel.ui_state=host.preference("battle_controls")
   panel.encounter_status.connect(func(done):host.continue_button.disabled=not done;host.one_day_button.disabled=not done)
   host.content.add_child(panel)
   panel.fit_height(maxf(340,host.scroll.size.y-95));return
@@ -34,7 +34,7 @@ static func draw(host):
   var all=contracts.filter(func(c):return query.text.is_empty() or (c.name+" "+c.employer).to_lower().contains(query.text.to_lower()))
   var id=int(host.preference("contract",all[0].id if not all.is_empty() else -1))
   if not all.any(func(c):return c.id==id) and not all.is_empty():id=int(all[0].id)
-  var panes=UI.split(body,host.size.x)
+  var panes=[body,host.contextual("CONDICIONES DEL CONTRATO")]
   var interval=UI.pager(panes[0],all.size(),maxi(0,int(all.map(func(c):return c.id).find(id)/6)),6,func(page):host.remember("page",page);host.remember("contract",all[page*6].id);host.render())
   for c in all.slice(interval[0],interval[1]):
    var b=UI.button(panes[0],"%s\n%d · %d días · %s"%[c.name,c.pay,c.days,c.employer],func():host.remember("contract",c.id);host.render())
@@ -85,16 +85,16 @@ static func prepare(host):
  for b in steps.get_children():b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;b.custom_minimum_size.x=120
  var mission=UI.block(host.content,contract.name,"Mínimo %d · máximo 4 unidades · desplegar antes del día %d"%[contract.min_force,contract.deadline])
  if step==0:
-  UI.text(mission,"Seleccione la fuerza. Las primeras dos unidades formarán Alfa y las siguientes Bravo.")
-  var panes=UI.workspace(host.content,host,1.8,1.0)
-  var grid=GridContainer.new();grid.columns=2;grid.add_theme_constant_override("h_separation",12);grid.add_theme_constant_override("v_separation",12);panes[0].add_child(grid)
-  UI.text(panes[1],"Fuerza seleccionada",true)
-  var next=UI.primary(panes[1],"Continuar al plan →",func():host.remember("step",1);host.render())
+  UI.text(mission,"Alfa: primeras dos unidades · Bravo: restantes")
+  host.set_task("Continuar al plan →",func():host.remember("step",1);host.render())
+  var next=host.task_button
+  var interval=UI.pager(host.content,sim.state.mechs.size(),int(host.preference("force_page",0)),4,func(page):host.remember("force_page",page);host.render())
+  var grid=GridContainer.new();grid.columns=2 if host.scroll.size.x<1000 else 4;grid.add_theme_constant_override("h_separation",14);grid.add_theme_constant_override("v_separation",14);host.content.add_child(grid)
   next.disabled=host.selected.size()<contract.min_force
-  var count=UI.text(panes[1],"Seleccionadas: %d / 4"%host.selected.size())
-  for m in sim.state.mechs:
+  var count=UI.text(mission,"Seleccionadas: %d / 4"%host.selected.size())
+  for m in sim.state.mechs.slice(interval[0],interval[1]):
    var card=UI.block(grid,m.name)
-   UI.unit_icon(card,sim.MECH_CATALOG[m.model])
+   var icon=UI.unit_icon(card,sim.MECH_CATALOG[m.model]);icon.custom_minimum_size=Vector2(96,144)
    var person=sim.pilot_for(sim.mech_index(m.uid))
    UI.text(card,"Integridad %d%% · %s"%[m.hp,"Sin piloto / dotación" if person.is_empty() else person.name])
    var check=CheckBox.new();check.text="Incluir en la fuerza" if eligible(sim,m.uid) else "No disponible para desplegar";check.disabled=not eligible(sim,m.uid);check.button_pressed=m.uid in host.selected;card.add_child(check)
@@ -115,7 +115,7 @@ static func prepare(host):
   var leader=UI.picker(command,"Jefe de operación",leaders,host.leader_id)
   leader.item_selected.connect(func(i):host.leader_id=int(leader.get_item_metadata(i)))
   UI.text(command,"La doctrina fija la actitud inicial. En batalla dará órdenes por grupo y sector; los subordinados ejecutan las maniobras.")
-  UI.primary(host.content,"Revisar despliegue →",func():host.remember("step",2);host.render())
+  host.set_task("Revisar despliegue →",func():host.remember("step",2);host.render())
  else:
   var review=UI.block(host.content,"Revisión antes del despliegue")
   for i in range(host.selected.size()):
@@ -123,14 +123,14 @@ static func prepare(host):
    UI.text(review,"%s · %s · %s · %d%%"%["Alfa" if i<2 else "Bravo",m.name,sim.pilot_for(sim.mech_index(m.uid)).name,m.hp])
   UI.text(review,"Doctrina: %s · Jefe: %s"%[["Cautelosa","Equilibrada","Agresiva"][host.doctrine],"Primera persona seleccionada" if host.leader_id<0 else sim.person_name(host.leader_id)])
   UI.text(review,"Pago total: %d · anticipo: %d. El anticipo se descuenta al liquidar. Cumplimiento parcial: importe contractual o 60%% del total si no está especificado."%[contract.pay,contract.advance])
-  var authorize=UI.primary(host.content,"Autorizar despliegue →",func():
+  host.set_task("Autorizar despliegue →",func():
    var team=[]
    for uid in host.selected:
     if not eligible(sim,uid):host.report("La disponibilidad cambió. Revise la fuerza.");return
     team.append(sim.mech_index(uid))
    host.report(sim.dispatch_battle(team,host.doctrine,host.leader_id))
    if not sim.state.active.is_empty():host.navigate("Operaciones","Batalla"))
-  authorize.disabled=host.selected.size()<contract.min_force
+  host.task_button.disabled=host.selected.size()<contract.min_force
  if step>0:UI.button(host.content,"← Paso anterior",func():host.remember("step",step-1);host.render())
  if step>0:UI.button(UI.disclosure(host.content,"Revisar compromiso contractual"),"Retirarse / cancelar…",func():host.cancel_contract())
 
@@ -162,7 +162,7 @@ static func debrief(host):
  var UI=host.UI
  var entries=host.sim.operation_report().archive.duplicate();entries.reverse()
  if entries.is_empty():UI.text(host.content,"Todavía no hay operaciones cerradas. El informe aparece tras el regreso y la liquidación.");return
- var panes=UI.split(host.content,host.size.x)
+ var panes=[host.content,host.contextual("INFORME OPERACIONAL")]
  var selected=int(host.preference("operation",entries[0].id))
  if not entries.any(func(e):return e.id==selected):selected=int(entries[0].id)
  var interval=UI.pager(panes[0],entries.size(),maxi(0,int(entries.map(func(e):return e.id).find(selected)/6)),6,func(page):host.remember("page",page);host.remember("operation",entries[page*6].id);host.render())

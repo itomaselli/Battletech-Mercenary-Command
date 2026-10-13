@@ -7,7 +7,7 @@ func run():
  for route in h.ROUTES:
   for section in h.ROUTES[route]:
    h.navigate(route,section);await process_frame
-   assert(h.content.get_child_count()>1)
+   assert(h.content.get_child_count()>0)
    assert(h.find_children("*","Window",true,false).filter(func(n):return n.visible).is_empty())
  assert(before==h.sim.state)
  h.sim.accept_contract(0);h.navigate("Operaciones","Preparación");await process_frame

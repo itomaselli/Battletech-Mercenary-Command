@@ -16,6 +16,7 @@ func _ready():
 	var row = HBoxContainer.new()
 	add_child(row)
 	title = Label.new()
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.text = "GALATEA / ARCHIVO CARTOGRÁFICO"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(title)
@@ -23,6 +24,8 @@ func _ready():
 	lamp.text = "● ENLACE"
 	row.add_child(lamp)
 	var selector = OptionButton.new()
+	selector.fit_to_longest_item = false
+	selector.custom_minimum_size.x = 170
 	for title_text in ["Distrito de base", "Cuenca exterior", "Cinturón industrial"]: selector.add_item(title_text)
 	selector.item_selected.connect(func(index):
 		sector = index

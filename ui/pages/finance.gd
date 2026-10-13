@@ -1,6 +1,8 @@
 extends RefCounted
 static func draw(host):
  var UI=host.UI;var sim=host.sim;var report=sim.financial_report()
+ var explanation=host.contextual("PREVISIÓN FINANCIERA")
+ UI.text(explanation,"La previsión utiliza los compromisos actuales. Los pagos condicionados al éxito no se cuentan como fondos disponibles.")
  var metrics=HBoxContainer.new();metrics.add_theme_constant_override("separation",12);host.content.add_child(metrics)
  for item in [["Fondos libres",report.free],["Comprometido",report.reserved],["Proyección a 30 días",report.projected]]:
   UI.text(UI.block(metrics,item[0]),"%d C-bills"%item[1],true)
@@ -15,7 +17,7 @@ static func draw(host):
    var c=report.categories[category];UI.text(categories,"%s · ingresos %d · gastos %d · neto %+d"%[category,c.income,c.expense,c.income-c.expense])
   if report.categories.is_empty():UI.text(categories,"Todavía no hay movimientos registrados.")
   return
- var panes=UI.split(host.content,host.size.x)
+ var panes=[host.content,host.contextual("DEUDAS Y COMPROMISOS")]
  var due=UI.block(panes[0],"Próximos pagos")
  UI.text(due,"Nómina · %d C-bills · en %d días"%[report.payroll,report.next_payroll-sim.state.day])
  UI.text(due,"Propiedad · %d C-bills · en %d días"%[report.ownership.next_bill,report.ownership.days])

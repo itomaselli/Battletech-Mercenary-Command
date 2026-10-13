@@ -10,14 +10,17 @@ static func text(parent: Node,value: String,heading: bool=false) -> Label:
  if parent is FlowContainer:
   l.autowrap_mode=TextServer.AUTOWRAP_OFF
   l.size_flags_horizontal=Control.SIZE_FILL
- if heading:l.add_theme_color_override("font_color",Color("d9b56f"));l.add_theme_font_size_override("font_size",20)
+ if heading:l.theme_type_variation="HeadingLabel";l.add_theme_color_override("font_color",Color("e4e2cd"));l.add_theme_font_size_override("font_size",26)
  parent.add_child(l)
  return l
 static func button(parent: Node,caption: String,callback: Callable) -> Button:
  var b=Button.new()
  b.text=caption
  b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
- if parent is FlowContainer:b.custom_minimum_size.x=clampf(caption.length()*13+40,145,400)
+ if parent is FlowContainer:b.custom_minimum_size.x=clampf(caption.length()*9+32,120,320)
+ if parent is HBoxContainer:
+  b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+  b.custom_minimum_size.x=65
  b.pressed.connect(callback)
  parent.add_child(b)
  return b

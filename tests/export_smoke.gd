@@ -11,6 +11,9 @@ func run():
  check(C!=null,"Simulation bundled")
  if failed:quit(1);return
  var sim=C.new(371)
+ var E=load("res://visual/emblems.gd")
+ check(E.NAMES.size()==50 and E.texture(49).atlas!=null,"50 emblems bundled")
+ sim.state.emblem_id=49
  check(sim.MECH_CATALOG.size()==56,"Full catalogue")
  check(sim.Universe.load_data().systems.size()>3000,"Atlas data")
  var image=load("res://visual/art.gd").unit_sprite(sim.MECH_CATALOG[0].id)

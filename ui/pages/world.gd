@@ -1,7 +1,7 @@
 extends RefCounted
 static func draw(host):
  if host.section=="Entorno":
-  var panes=host.UI.workspace(host.content,host,1.8,1.0)
+  var panes=[host.content,host.contextual("ENTORNO LOCAL")]
   panes[0].size_flags_stretch_ratio=1.8
   var atlas=preload("res://ui/atlas.gd").new();panes[0].add_child(atlas);atlas.map.custom_minimum_size.y=220;atlas.animation=host.settings.animation;atlas.refresh(host.sim)
   atlas.crew.get_parent().hide()
@@ -25,7 +25,7 @@ static func draw(host):
  var UI=host.UI
  var sim=host.sim
  UI.text(host.content,"Afiliaciones de referencia: %s · escenario %d. No cambia fronteras canónicas."%[sim.Universe.load_data().reference_dates[str(sim.state.scenario_year)],sim.state.scenario_year])
- var panes=UI.workspace(host.content,host,1.8,1.0)
+ var panes=[host.content,host.contextual("SISTEMA SELECCIONADO")]
  panes[0].size_flags_stretch_ratio=1.8
  var search=LineEdit.new();search.placeholder_text="Buscar sistema o alias";search.text=host.preference("query","");panes[0].add_child(search)
  var results=ItemList.new();results.custom_minimum_size.y=90;panes[0].add_child(results)

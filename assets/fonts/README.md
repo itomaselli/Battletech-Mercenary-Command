@@ -1,0 +1,1 @@
+Tiny5 — The Tiny5 Project Authors. SIL Open Font License 1.1, included in OFL-Tiny5.txt. Source: https://github.com/google/fonts/tree/main/ofl/tiny5 . Original variable TTF, unmodified; used for pixel headings and primary controls.

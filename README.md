@@ -1,6 +1,12 @@
-# BattleTech Mercenary Command — v0.45.0
+# BattleTech Mercenary Command — v0.46.0 · rama de rediseño
 
 Juego personal independiente de MekHQ, en Godot 4/GDScript. Diriges una compañía desde una terminal de mando: contratas personal, preparas fuerzas, aceptas compromisos, das órdenes y recibes informes. La simulación propia conserva el estado y las consecuencias. No requiere conexión, claves ni assets descargados.
+
+## Interfaz territorial y emblemas — v0.46
+
+Rama `ui/territorial-redesign`: cabecera con identidad y fuerza, menú vertical, mapa central y panel contextual, siguiendo la captura de referencia del usuario. La selección de uno de los 50 emblemas se realiza en **Sistema → Identidad** o **Nueva carrera → Elegir emblema** y se guarda con la campaña. Sprites y generación low-res anteriores conservados.
+
+[Alcance y comprobaciones](docs/UI-PROPUESTA-2.md). La v0.45 permanece en main; esta entrega no la reemplaza. El mapa territorial es ilustrativo: el encuentro jugable y las órdenes se consultan en Batalla.
 
 ## Escritorio de mando — v0.45
 
