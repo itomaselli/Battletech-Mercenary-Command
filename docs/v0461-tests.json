@@ -1,0 +1,47 @@
+[
+  {
+    "test": "routes_ui",
+    "passed": true
+  },
+  {
+    "test": "shell_ui",
+    "passed": true
+  },
+  {
+    "test": "layout_ui",
+    "passed": true
+  },
+  {
+    "test": "inbox_ui",
+    "passed": true
+  },
+  {
+    "test": "journey_ui",
+    "passed": true
+  },
+  {
+    "test": "battle_ui",
+    "passed": true
+  },
+  {
+    "test": "career_wizard_ui",
+    "passed": true
+  },
+  {
+    "test": "emblems",
+    "passed": true
+  },
+  {
+    "test": "export_smoke",
+    "passed": true
+  },
+  {
+    "test": "redesign_ui",
+    "passed": true,
+    "sizes": [
+      "1100x740",
+      "1672x940"
+    ],
+    "visual_review": "Títulos completos sin corte horizontal; C-bills visible."
+  }
+]

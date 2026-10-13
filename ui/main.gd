@@ -174,7 +174,7 @@ func render():
  for m in sim.state.mechs:
   if preload("res://ui/pages/operations.gd").eligible(sim,m.uid):ready+=1
   if m.repair:repairs+=1
- resource_labels[0].text=str(sim.available_funds())+" C-B"
+ resource_labels[0].text=str(sim.available_funds())+" C-bills"
  resource_labels[1].text="%d / %d"%[ready,sim.state.mechs.size()]
  resource_labels[2].text="%d reparación"%repairs
  if not has_campaign:

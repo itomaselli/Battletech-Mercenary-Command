@@ -36,7 +36,7 @@ static func build() -> Theme:
   t.set_stylebox(state,"TabButton",box(bg,LINE,7))
  t.set_font_size("font_size","NavigationButton",14)
  t.set_font_size("font_size","TabButton",14)
- var heading=load("res://assets/fonts/Tiny5.ttf");heading.antialiasing=TextServer.FONT_ANTIALIASING_NONE
+ var heading=load("res://assets/fonts/VT323-Regular.ttf");heading.antialiasing=TextServer.FONT_ANTIALIASING_NONE
  t.set_type_variation("HeadingLabel","Label");t.set_font("font","HeadingLabel",heading)
  t.set_font_size("font_size","NavigationButton",18)
  t.set_font_size("font_size","PrimaryButton",22)

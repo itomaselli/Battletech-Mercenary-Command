@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main, ui/territorial-redesign]
+    tags: ['v*']
     paths:
       - 'sim/**'
       - 'ui/**'
@@ -69,3 +70,56 @@ jobs:
           path: |
             smoke*.log
             docs/windows-build.json
+
+  macos:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and verify Godot
+        run: |
+          base=https://github.com/godotengine/godot/releases/download/4.4.1-stable
+          curl -fsSL "$base/Godot_v4.4.1-stable_macos.universal.zip" -o Godot_v4.4.1-stable_macos.universal.zip
+          curl -fsSL "$base/SHA512-SUMS.txt" -o checksums.txt
+          python3 - <<'PYVERIFY'
+          import hashlib
+          from pathlib import Path
+          p=Path('Godot_v4.4.1-stable_macos.universal.zip')
+          expected=next(line.split()[0] for line in Path('checksums.txt').read_text().splitlines() if line.endswith(p.name))
+          assert hashlib.sha512(p.read_bytes()).hexdigest()==expected
+          PYVERIFY
+          unzip -q Godot_v4.4.1-stable_macos.universal.zip -d engine
+      - name: Build and test macOS app
+        run: |
+          engine/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit
+          python3 tools/build_macos.py "$PWD/engine/Godot.app"
+          app=$(find exports -maxdepth 1 -name '*.app' -print -quit)
+          "$app/Contents/MacOS/MercenaryCommand" --headless --script "$PWD/tests/export_smoke.gd" --quit-after 3600 > macos-smoke.log 2>&1
+          cat macos-smoke.log
+          grep -q EXPORT_SMOKE_PASS macos-smoke.log
+          if grep -E 'ERROR:|FAIL:' macos-smoke.log; then exit 1; fi
+          ditto -c -k --sequesterRsrc --keepParent "$app" "exports/Mercenary-Command-${GITHUB_REF_NAME#v}-macOS.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mercenary-command-macos
+          path: exports/*.zip
+          if-no-files-found: error
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [windows, macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: mercenary-command-*
+          path: release-assets
+          merge-multiple: true
+      - name: Publish verified packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" release-assets/*.zip --verify-tag --title "Mercenary Command $GITHUB_REF_NAME" --notes-file docs/RELEASE-v0461.md
