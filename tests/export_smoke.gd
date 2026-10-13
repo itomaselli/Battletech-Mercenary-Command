@@ -14,6 +14,7 @@ func run():
  var E=load("res://visual/emblems.gd")
  check(E.NAMES.size()==50 and E.texture(49).atlas!=null,"50 emblems bundled")
  sim.state.emblem_id=49
+ check(sim.HQ.MODULES.size()==8 and sim.state.hq.stage=="none","HQ bundled")
  check(sim.MECH_CATALOG.size()==56,"Full catalogue")
  check(sim.Universe.load_data().systems.size()>3000,"Atlas data")
  var image=load("res://visual/art.gd").unit_sprite(sim.MECH_CATALOG[0].id)
@@ -32,7 +33,7 @@ func run():
  h.testing=true;h.sim=sim
  root.add_child(h)
  for i in range(5):await process_frame
- for destination in [["Compañía","Hangar"],["Mundo","Atlas"],["Capitán","Asuntos"],["Mando","Crónica"]]:
+ for destination in [["Mando","HQ"],["Compañía","Hangar"],["Mundo","Atlas"],["Capitán","Asuntos"],["Mando","Crónica"]]:
   h.navigate(destination[0],destination[1])
   for i in range(3):await process_frame
   check(h.content.get_child_count()>0,"Page "+destination[1])

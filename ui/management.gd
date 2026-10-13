@@ -320,7 +320,7 @@ func world_page(parent: Node):
 		var r = frontier.report
 		text_line(parent, "Observado día %d · Recibido día %d · %s\n%s\nFuente: %s" % [r.observed, r.received, "Información antigua: solicitar actualización" if r.stale else "Información reciente; puede haber cambiado", r.text, r.source])
 	if actor.contact_day >= 0:
-		confirm_action(parent, "Solicitar informe · 500 C-bills", "¿Consultar al contacto? Coste: 500 C-bills; demora: dos días. Es su declaración, no una verificación independiente.", func(): return sim.request_world_report(actor.id))
+		confirm_action(parent, "Solicitar informe · %d C-bills"%sim.HQ.price(sim,"intelligence",500), "¿Consultar al contacto? Coste: %d C-bills; demora: dos días. Es su declaración, no una verificación independiente."%sim.HQ.price(sim,"intelligence",500), func(): return sim.request_world_report(actor.id))
 	text_line(parent, "OPORTUNIDADES DEL MUNDO")
 	var statuses = {"open": "Disponible", "accepted": "Aceptada", "completed": "Cumplida", "failed": "Incumplida", "expired": "Vencida", "withdrawn": "Retirada"}
 	if frontier.opportunities.is_empty(): text_line(parent, "No hay solicitudes extraordinarias registradas.")

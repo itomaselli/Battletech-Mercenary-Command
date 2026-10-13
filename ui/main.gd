@@ -1,7 +1,7 @@
 extends Control
 const Campaign=preload("res://sim/campaign.gd")
 const UI=preload("res://ui/components.gd")
-const ROUTES={"Mando":["Bandeja","Agenda","Crónica","Capitán"],"Compañía":["Personal","Hangar","Taller"],"Operaciones":["Territorio","Resumen","Contratos","Plan","Batalla","Informe","Encargos"],"Mundo":["Atlas","Entorno","Región","Contactos"],"Mercado":["Unidades","Catálogo","Repuestos","Personal"],"Finanzas":["Previsión"],"Capitán":["Personaje","Asuntos","Legado"],"Campaña":["Partidas","Identidad","Opciones"]}
+const ROUTES={"Mando":["Bandeja","Agenda","Crónica","Capitán","HQ"],"Compañía":["Personal","Hangar","Taller"],"Operaciones":["Territorio","Resumen","Contratos","Plan","Batalla","Informe","Encargos"],"Mundo":["Atlas","Entorno","Región","Contactos"],"Mercado":["Unidades","Catálogo","Repuestos","Personal"],"Finanzas":["Previsión"],"Capitán":["Personaje","Asuntos","Legado"],"Campaña":["Partidas","Identidad","Opciones"]}
 var sim=Campaign.new()
 var library=preload("res://sim/campaign_library.gd").new()
 var active_path=""
@@ -226,7 +226,9 @@ func advance_days(count: int):
   if blocked() or sim.state.ended or sim.state.chronicle.size()>before:break
  report("Avance de %d día(s). %s"%[sim.state.day-start,"Hay una decisión pendiente." if blocked() else "Revise los informes recibidos."])
 func mando():
- if section=="Crónica":
+ if section=="HQ":
+  preload("res://ui/pages/headquarters.gd").draw(self)
+ elif section=="Crónica":
   preload("res://ui/story.gd").history(self,UI.disclosure(content,"Explorar antecedentes y personas"))
   var search=LineEdit.new();search.placeholder_text="Filtrar por persona, fecha o acontecimiento";search.text=preference("query","");content.add_child(search)
   var entries=UI.column(content)

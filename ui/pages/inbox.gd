@@ -1,6 +1,8 @@
 extends RefCounted
 static func entries(sim) -> Array:
  var items=[]
+ if not sim.state.hq.request.is_empty():items.append({"id":"hq:request","title":"Propuesta para el HQ","kind":"OPCIONAL","source":"HQ","body":sim.state.hq.request.text,"target":["Mando","HQ"]})
+ if sim.state.hq.debt>0:items.append({"id":"hq:debt","title":"Mantenimiento del HQ pendiente","kind":"AVISO","source":"HQ","body":"Las ventajas y obras están suspendidas. Deuda: %d C-bills."%sim.state.hq.debt,"target":["Mando","HQ"]})
  for request in sim.Story.People.pending(sim):items.append({"id":"personal:"+str(request.id),"title":sim.person_name(request.person)+": "+sim.Story.People.GOALS[request.goal],"kind":"OPCIONAL","source":sim.person_name(request.person),"body":sim.Story.People.offer_text(request)+" Puede aplazar 7 días o rechazar (confianza −1). Sin respuesta caduca sin penalidad el día %d."%request.expires,"personal":request})
  var local=sim.state.story.society.pending
  if not local.is_empty():items.append({"id":"local:"+local.key,"title":"Comunicación del enlace civil","kind":"OPCIONAL","source":sim.Universe.system(local.system).name,"body":local.text+" Disponible hasta el día %d; ignorarla no castiga."%local.expires,"local":local})

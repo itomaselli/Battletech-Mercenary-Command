@@ -22,14 +22,17 @@ static func draw(host):
  UI.text(due,"Nómina · %d C-bills · en %d días"%[report.payroll,report.next_payroll-sim.state.day])
  UI.text(due,"Propiedad · %d C-bills · en %d días"%[report.ownership.next_bill,report.ownership.days])
  UI.text(due,"Taller previsto a 30 días · %d C-bills"%report.repairs_30)
+ UI.text(due,"HQ · %d C-bills · en %d días (incluye deuda)"%[report.hq.next_bill,report.hq.days])
+ UI.button(due,"Revisar HQ →",func():host.navigate("Mando","HQ"))
  UI.button(due,"Revisar taller →",func():host.navigate("Compañía","Taller"))
  var debt=UI.block(panes[1],"Deudas y regularización")
  for item in [["Salarial",sim.state.arrears,sim.settle_arrears],["Contractual",sim.state.contract_debt,sim.settle_contract_debt],["Mantenimiento",report.ownership.debt,sim.settle_ownership_debt]]:
   if item[1]<=0:UI.muted(debt,item[0]+" · sin deuda")
   else:
    var b=UI.button(debt,"Pagar %s · %d"%[item[0],item[1]],func():host.run(item[2]));b.disabled=report.free<=0
+ if report.hq.debt>0:UI.button(debt,"Pagar HQ · %d"%report.hq.debt,func():host.run(func():return sim.hq_command({"action":"pay"})))
  var assumptions=UI.disclosure(host.content,"Cómo se calcula la previsión")
- UI.text(assumptions,"Caja actual %d. Se descuentan entregas, nómina, deudas, taller previsto y próxima factura de propiedad. Plantilla y taller actuales; recursos suficientes y sin compras nuevas. No incluye %d de cobro condicionado al éxito."%[sim.state.funds,report.conditional])
+ UI.text(assumptions,"Caja actual %d. Se descuentan entregas, nómina, deudas, taller previsto y próximas facturas de propiedad y HQ. Plantilla y taller actuales; recursos suficientes y sin compras nuevas. No incluye %d de cobro condicionado al éxito."%[sim.state.funds,report.conditional])
  UI.text(assumptions,"Propiedad %d/día · devengado %d. Taller autorizado total %d."%[report.ownership.daily,report.ownership.accrued,report.repairs])
 static func ledger(host):
  var UI=host.UI;var sim=host.sim

@@ -1,6 +1,7 @@
 extends RefCounted
 ## Pure command-driven simulation. No scene tree or UI dependencies.
-const VERSION = 25
+const VERSION = 26
+const HQ = preload("res://sim/headquarters.gd")
 const Story = preload("res://sim/story/memory.gd")
 const CareerStart = preload("res://sim/career_start.gd")
 const RPG = preload("res://sim/rpg/captain.gd")
@@ -59,6 +60,7 @@ func _init(campaign_seed: int = 3027, scenario_year: int = 3027, initial: Dictio
 	state["military"] = Operations.create(campaign_seed)
 	state["rpg"] = RPG.create(campaign_seed)
 	state["story"] = Story.create(0)
+	state["hq"] = HQ.create()
 	Story.People.ensure(self)
 	Story.Culture.ensure(self)
 	log_event("Fundación", "La compañía recibe cuatro unidades en Galatea. El personal operativo queda asignado a su fuerza inicial.")
@@ -194,8 +196,9 @@ func advance(days: int = 1):
 		if state.ended or not state.issues.is_empty() or military_waiting() or RPG.waiting(self): break
 		state.day = int(state.day) + 1
 		for person in state.staff:
-			person.injury = maxi(0, int(person.injury) - 1)
+			person.injury = maxi(0, int(person.injury) - 1 - (HQ.extra(self,"medical",str(person.id),1) if person.injury>0 and not personnel_deployed(person.id) else 0))
 		_recover_people()
+		HQ.tick(self)
 		_travel_tick()
 		RPG.tick(self)
 		Story.People.tick(self)
@@ -265,6 +268,7 @@ func _resolve():
 	var total_pay = int(op.contract.get("partial_pay",int(op.contract.pay*0.6)) if result == "partial" else op.contract.pay if success else op.contract.failure_pay)
 	var payment = total_pay - int(op.contract.advance)
 	_settle_contract(payment)
+	HQ.operation(self,op.contract,success,payment)
 	_close_opportunity(op.contract, success)
 	_change_relation(op.contract.employer, 0 if result == "partial" else 1 if success else -1)
 	state.reputation += 0 if result == "partial" else 1 if success else -1
@@ -441,6 +445,9 @@ func load_game(path: String = "user://campaign.json") -> Error:
 	if parsed is Dictionary and parsed.get("version") == 24:
 		parsed["story"] = Story.create(int(parsed.get("day",0)))
 		parsed.version = 25
+	if parsed is Dictionary and parsed.get("version") == 25:
+		parsed["hq"] = HQ.create()
+		parsed.version = 26
 	if parsed is Dictionary and parsed.get("rpg") is Dictionary: RPG.upgrade(parsed.rpg)
 	if parsed is Dictionary and parsed.get("story") is Dictionary: Story.upgrade(parsed.story)
 	if parsed is Dictionary and not parsed.has("emblem_id"): parsed.emblem_id=0
@@ -490,7 +497,7 @@ func _valid_save(value: Variant) -> bool:
 		for i in op.team:
 			if not _number_between(i, 0, value.mechs.size() - 1) or int(i) != i or i in seen: return false
 			seen.append(i)
-	return Story.valid(value.get("story"),int(value.day)) and _valid_personnel(value) and _valid_logistics(value) and _valid_contract_state(value) and _valid_management(value) and _valid_hangar(value) and _valid_market(value) and _valid_ownership(value) and _valid_careers(value) and _valid_relations(value) and _valid_stories(value) and _valid_world(value) and _valid_frontier(value) and _valid_lore(value) and _valid_missions(value) and _valid_travel(value) and RPG.valid(value.get("rpg"),int(value.day)) and RPG.valid_links(value) and Story.valid_links(value) and Operations.valid(value.get("military"), int(value.day), value.active)
+	return HQ.valid(value.get("hq"),int(value.day)) and Story.valid(value.get("story"),int(value.day)) and _valid_personnel(value) and _valid_logistics(value) and _valid_contract_state(value) and _valid_management(value) and _valid_hangar(value) and _valid_market(value) and _valid_ownership(value) and _valid_careers(value) and _valid_relations(value) and _valid_stories(value) and _valid_world(value) and _valid_frontier(value) and _valid_lore(value) and _valid_missions(value) and _valid_travel(value) and RPG.valid(value.get("rpg"),int(value.day)) and RPG.valid_links(value) and Story.valid_links(value) and Operations.valid(value.get("military"), int(value.day), value.active)
 
 func _number_between(value: Variant, low: float, high: float) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and value >= low and value <= high
@@ -654,7 +661,7 @@ func supply_quote(urgent: bool) -> Dictionary:
 		if p.role == "Logística" and person_available(p): skill += int(p.skill)
 	var regional_supply = int(state.get("missions",{}).get("regions",{}).get(state.get("location_id",""),{}).get("supply",0))
 	var discount = clampi(mini(15, skill * 2)+regional_supply*2,-10,25)
-	return {"cost": int((15000 if urgent else 10000) * (100 - discount) / 100),
+	return {"cost": HQ.price(self,"comms",int(15000 * (100 - discount) / 100)) if urgent else int(10000 * (100 - discount) / 100),
 		"days": 1 if urgent else maxi(2, 4 - int(skill / 5)), "quantity": 30, "discount": discount}
 
 func order_supplies(urgent: bool) -> String:
@@ -710,10 +717,10 @@ func _workshop_tick():
 		if deployed(i) or state.supplies < 2 or available_funds() < 1000: continue
 		capacity -= 1
 		worked = true
-		state.supplies -= 2
+		state.supplies -= 2-HQ.extra(self,"storage","maintenance",2)
 		state.funds -= 1000
 		_record_transaction("Taller", -1000, mech.name)
-		mech.hp = mini(100, int(mech.hp) + 10)
+		mech.hp = mini(100, int(mech.hp) + 10 + HQ.extra(self,"workshop",str(mech.uid),mini(10,100-int(mech.hp))))
 		if mech.hp == 100:
 			mech.repair = false
 			state.repair_queue.erase(i)
@@ -730,7 +737,12 @@ func repair_estimates() -> Array:
 	var lanes = []
 	for i in range(workshop_capacity()): lanes.append(0)
 	for index in state.repair_queue:
-		var days = ceili((100 - state.mechs[index].hp) / 10.0)
+		var days = 0
+		var hp = int(state.mechs[index].hp)
+		var credit = int(state.hq.fractions.get("workshop:"+str(state.mechs[index].uid),0))
+		while hp<100:
+			credit+=10*HQ.rate(self,"workshop")
+			hp+=10+int(credit/100);credit=credit%100;days+=1
 		var finish = -1
 		if not lanes.is_empty():
 			var lane = lanes.find(lanes.min())
@@ -895,12 +907,13 @@ func financial_report() -> Dictionary:
 			var start = int(estimate.days) - duration
 			repair_30 += clampi(30 - start, 0, duration) * 1000
 	var ownership = ownership_forecast()
+	var hq = HQ.forecast(self)
 	var final_payment = 0
 	if not state.accepted.is_empty(): final_payment = int(state.accepted.pay - state.accepted.advance)
 	return {"categories": categories, "payroll": monthly_payroll(), "next_payroll": (int(state.day / 30) + 1) * 30,
 		"reserved": committed_payments(), "free": available_funds(), "repairs": repairs, "repairs_30": repair_30,
-		"ownership": ownership,
-		"projected": int(state.funds) - committed_payments() - monthly_payroll() - int(state.arrears) - int(state.contract_debt) - repair_30 - ownership.next_bill,
+		"ownership": ownership, "hq": hq,
+		"projected": int(state.funds) - committed_payments() - monthly_payroll() - int(state.arrears) - int(state.contract_debt) - repair_30 - ownership.next_bill - hq.next_bill,
 		"conditional": final_payment}
 
 func settle_arrears() -> String:
@@ -1326,6 +1339,7 @@ func _init_relations(data: Dictionary):
 	for person in data.staff + data.alumni: _init_person_condition(person)
 
 func person_available(person: Dictionary) -> bool:
+	if not person.is_empty() and state.get("hq",{}).get("training",{}).has(str(person.id)): return false
 	if not person.is_empty() and RPG.person_busy(self,int(person.id)): return false
 	return not person.is_empty() and person.injury == 0 and person.fatigue < 80 and state.day >= person.rest_until
 
@@ -1333,7 +1347,7 @@ func _recover_people():
 	for person in state.staff:
 		if not personnel_deployed(person.id):
 			var recovery = 14 if person.rest_until >= state.day and person.rest_until > 0 else 6
-			person.fatigue = maxi(0, int(person.fatigue) - recovery)
+			person.fatigue = maxi(0, int(person.fatigue) - recovery - (HQ.extra(self,"quarters",str(person.id),mini(recovery,int(person.fatigue))) if person.fatigue>0 else 0))
 
 func grant_leave(id: int) -> String:
 	var person = person_by_id(id)
@@ -1592,14 +1606,15 @@ func request_world_report(id: String) -> String:
 	if actor.is_empty() or actor.contact_day < 0: return "Primero establezca un contacto con esta organización."
 	if state.frontier.queries.has(id): return "Ya hay una consulta en curso."
 	if state.frontier.reports.has(id) and state.day < state.frontier.reports[id].received + 7: return "El contacto pide esperar siete días entre informes recibidos."
-	if available_funds() < 500: return "Se requieren 500 C-bills libres."
+	var cost = HQ.price(self,"intelligence",500)
+	if available_funds() < cost: return "Se requieren %d C-bills libres."%cost
 	var report_text = "Declara estar preparando nuevas actividades; no confirma disponibilidad para terceros."
 	if actor.kind == "Contratante":
 		report_text = "Declara necesidades de protección pendientes." if actor.private.demand >= 4 else "Declara tener sus necesidades inmediatas parcialmente cubiertas."
 	elif not actor.private.commitments.is_empty():
 		report_text = "Declara estar cumpliendo un encargo; no comunica destino ni composición de fuerzas."
-	state.funds -= 500
-	_record_transaction("Inteligencia", -500, "Consulta: " + actor.name)
+	state.funds -= cost
+	_record_transaction("Inteligencia", -cost, "Consulta: " + actor.name)
 	state.frontier.queries[id] = {"observed": int(state.day), "due": int(state.day) + 2, "text": report_text, "source": "Enlace de " + actor.name + "; declaración interesada, sin corroboración independiente"}
 	log_event("Inteligencia", "Consulta enviada a %s. Respuesta prevista en dos días." % actor.name)
 	return "Consulta enviada. La información puede cambiar mientras llega la respuesta."
@@ -1976,3 +1991,6 @@ func _battle_memories(b: Dictionary):
 		elif u.escaped: text = "Alcanzó la extracción conforme a las órdenes de retirada; conserva el recuerdo del repliegue."
 		elif u.hp < u.initial_hp: text = "Regresó del encuentro con %d puntos de daño en su unidad." % (u.initial_hp-u.hp)
 		Story.People.remember(self,int(u.pilot),text)
+
+func hq_command(args: Dictionary) -> String:
+	return HQ.command(self,args)

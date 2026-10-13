@@ -1,0 +1,10 @@
+{
+  "baseline_expense": 284100,
+  "developed_hq_extra_expense": 129600,
+  "hq_extra_expense": 72000,
+  "inspection": 10000,
+  "minimum_cash_before_purchase": 536000,
+  "note": "Controlled overhead comparison, same roster, no contracts or workshop activity; does not predict individual campaign income.",
+  "period_days": 180,
+  "purchase": 450000
+}

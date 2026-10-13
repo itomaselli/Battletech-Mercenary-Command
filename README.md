@@ -29,7 +29,7 @@ Descargá la última versión desde [Releases](https://github.com/itomaselli/Bat
 | Menú | Para qué sirve |
 | --- | --- |
 | Operaciones | Situación, preparación, batalla e informes |
-| Compañía | Comunicaciones, agenda, crónica y acceso al capitán |
+| Compañía | Comunicaciones, agenda, crónica, capitán y HQ |
 | Mechs / Vehículos / Personal | Expedientes, asignaciones e historias |
 | Contratos | Ofertas y condiciones de trabajo |
 | Inteligencia | Atlas, contexto regional y contactos |
@@ -38,6 +38,14 @@ Descargá la última versión desde [Releases](https://github.com/itomaselli/Bat
 | Sistema | Partidas, identidad, 50 emblemas y opciones visuales |
 
 El mapa de **Territorio** es ambiental; el encuentro con posiciones y órdenes está en **Batalla**. Podés desactivar las líneas de escaneo y la viñeta en **Sistema → Opciones**.
+
+## Conseguir un HQ
+
+En **Compañía → HQ** podés conseguir una **Union usada**, bautizarla y asignar un enlace con su tripulación. La inspección se habilita desde el día 60, con reputación 4 y cuatro operaciones cumplidas registradas por el sistema de HQ. Elegí compra, patrocinio por servicio o recuperación mediante la red de salvamento. La pantalla explica los requisitos y costes antes de comprometer fondos.
+
+La nave tiene **cuatro espacios para ocho tipos de instalaciones**, con dos niveles y ventajas moderadas. Construí desde Instalaciones; revisá obras, cursos y promesas en Proyectos. El mantenimiento cuesta 12000 C-bills por 30 días más las instalaciones. Reserva o deuda suspenden las ventajas. Las peticiones de la tripulación quedan en su historia y en los expedientes. El salto interestelar sigue contratado y el límite de despliegue sigue siendo cuatro unidades.
+
+[Diseño y balance del HQ](docs/PLAN-HQ.md). Las partidas anteriores incorporan el proyecto sin inventar adquisiciones ni éxitos históricos; los cuatro éxitos requeridos se registran a partir de esta actualización.
 
 ## Desarrollo y créditos
 

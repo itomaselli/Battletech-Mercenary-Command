@@ -1,0 +1,92 @@
+[
+  {
+    "test": "export_smoke",
+    "passed": true
+  },
+  {
+    "test": "routes_ui",
+    "passed": true
+  },
+  {
+    "test": "shell_ui",
+    "passed": true
+  },
+  {
+    "test": "layout_ui",
+    "passed": true
+  },
+  {
+    "test": "inbox_ui",
+    "passed": true
+  },
+  {
+    "test": "journey_ui",
+    "passed": true
+  },
+  {
+    "test": "battle_ui",
+    "passed": true
+  },
+  {
+    "test": "career_wizard_ui",
+    "passed": true
+  },
+  {
+    "test": "emblems",
+    "passed": true
+  },
+  {
+    "test": "battle_campaign",
+    "passed": true
+  },
+  {
+    "test": "story_campaigns",
+    "passed": true
+  },
+  {
+    "test": "rpg_reservations",
+    "passed": true
+  },
+  {
+    "test": "rpg_v20",
+    "passed": true
+  },
+  {
+    "test": "rpg_v21",
+    "passed": true
+  },
+  {
+    "test": "v15",
+    "passed": true
+  },
+  {
+    "test": "headquarters",
+    "passed": true,
+    "checks": 69
+  },
+  {
+    "test": "headquarters_ui",
+    "passed": true,
+    "sizes": [
+      "1100x740",
+      "1672x940"
+    ]
+  },
+  {
+    "test": "headquarters_economy",
+    "passed": true,
+    "days": 180
+  },
+  {
+    "test": "macos_hq_package",
+    "passed": true
+  },
+  {
+    "test": "macos_export_smoke",
+    "passed": true
+  },
+  {
+    "test": "windows_pck_hq",
+    "passed": true
+  }
+]

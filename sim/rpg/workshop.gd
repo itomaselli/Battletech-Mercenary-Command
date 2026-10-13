@@ -39,7 +39,7 @@ static func command(sim,args: Dictionary) -> String:
    if lot.system!=sim.state.location_id or not lot.status in ["rights","assessed"]:return "Lote no disponible aquí o trabajo en curso."
    var technician=tech(sim)
    if technician<0:return "Se necesita un técnico libre."
-   if not sim.RPG.spend(sim,3000 if lot.status=="rights" else 2000,"Salvamento "+id):return "Fondos insuficientes."
+   if not sim.RPG.spend(sim,3000 if lot.status=="rights" else sim.HQ.price(sim,"salvage",2000),"Salvamento "+id):return "Fondos insuficientes."
    w.jobs.append({"kind":"assess" if lot.status=="rights" else "process","lot":id,"uid":-1,"person":technician,"due":int(sim.state.day)+2})
    lot.status="transit"
    sim.person_by_id(technician).rest_until=int(sim.state.day)+2
@@ -130,7 +130,7 @@ static func view(sim) -> Array:
    actions.append(sim.RPG.button("Arreglo por 7 días · 1 día / 2.000 / integridad actual","workshop",{"action":"temporary","uid":m.uid}))
   result.append({"title":"Taller: "+m.name,"text":"#%d · reserva %s · %s"%[m.uid,str(m.uid in w.reserved),"sin avería funcional" if f.is_empty() else "avería "+f.kind+"; provisional hasta día "+str(f.temporary_until)],"actions":actions})
  for lot in sim.state.rpg.negotiation.salvage:
-  result.append({"title":"Lote "+lot.id,"text":lot.source+" · "+lot.status,"actions":[sim.RPG.button("Transportar/evaluar · 3.000, 2 días / procesar · 2.000, 2 días","workshop",{"action":"salvage","id":lot.id})] if lot.status in ["rights","assessed"] else []})
+  result.append({"title":"Lote "+lot.id,"text":lot.source+" · "+lot.status,"actions":[sim.RPG.button("Transportar/evaluar · 3000, 2 días / procesar · %d, 2 días"%sim.HQ.price(sim,"salvage",2000),"workshop",{"action":"salvage","id":lot.id})] if lot.status in ["rights","assessed"] else []})
  return result
 static func valid(w: Variant,day: int) -> bool:
  if not w is Dictionary or not w.get("parts") is Dictionary or not w.get("faults") is Dictionary or not w.get("jobs") is Array or not w.get("reserved") is Array or not w.get("policy") is Dictionary:return false

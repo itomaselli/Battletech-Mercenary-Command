@@ -312,6 +312,7 @@ static func valid(r: Variant, day: int) -> bool:
   if not job is Dictionary or not job.get("kind") in ["transport","investigate","organize","conversation","case","conflict","rest"] or not integer(job.get("due"),day+1,day+30): return false
  return true
 static func person_busy(sim,id: int) -> bool:
+ if sim.state.get("hq",{}).get("training",{}).has(str(id)):return true
  if sim.Story.Objectives.busy(sim,id):return true
  if sim.state.get("story",{}).get("people",{}).get("jobs",[]).any(func(j):return j.person==id):return true
  var r=sim.state.get("rpg",{})

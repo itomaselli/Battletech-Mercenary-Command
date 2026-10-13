@@ -57,9 +57,10 @@ static func tick(sim):
   if p.is_empty():continue
   var profile=data.profiles[str(p.id)]
   if job.kind=="training":
-   sim._gain_experience(p,1,"Formación acordada")
+   var gained=1+sim.HQ.extra(sim,"simulator",str(p.id),1)
+   sim._gain_experience(p,gained,"Formación acordada")
    profile.progress+=1
-   remember(sim,p.id,"Completó una sesión de formación; experiencia +1.",0,1)
+   remember(sim,p.id,"Completó una sesión de formación; experiencia +%d."%gained,0,1)
    if profile.progress>=2:complete(sim,p.id,"Cumplió su aspiración de formación.")
   else:complete(sim,p.id,"Terminó el permiso protegido que había solicitado.")
  for key in data.profiles:

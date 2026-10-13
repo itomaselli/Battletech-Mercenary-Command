@@ -1,13 +1,13 @@
 {
-  "version": "0.46.0",
+  "version": "0.50.0",
   "engine": "4.4.1.stable.official.49a5bc7b6",
   "platform": "Windows x86_64",
   "executable_format": "PE32+ AMD64",
   "embedded_pck": false,
   "sha256": {
     "MercenaryCommand.exe": "b493c1d53fb915f7805f360cfe42d1c3126e720dfc234a4b0f2feb99200f9a4b",
-    "MercenaryCommand.pck": "754668271dec8bd606db7058ea4ca645b2b5ea72de78a62c1789abdb675d5088"
+    "MercenaryCommand.pck": "dcdada93e2438aebcc54384e1e593ca25bac2654e7618ff28d108852df9a272b"
   },
-  "zip_sha256": "9f9a8ddbc0c53650b59b3be45fe9b3ad76ad3ebee08459766eacdf83085b5e1b",
+  "zip_sha256": "b53ee9e19104b3252f554cce0c5518738d5d0cc6e4d4dd676c863359dd395c96",
   "native_windows_execution": "not_run_by_this_build_script"
 }
